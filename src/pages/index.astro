@@ -22,13 +22,14 @@ const aboutParallax = blocks.find((b) => b.kind === "about-parallax") as
 
 <BaseLayout title="Liam Oxley — Portfolio">
   
-  <div class="relative w-full bg-[linear-gradient(to_bottom,#F9DABF,#FFC297)] pb-24 md:pb-36 overflow-hidden">
+  <div class="relative w-full bg-[linear-gradient(to_bottom,#F9DABF,#FFC297)] overflow-hidden">
     <HomeHero
-      title={frontmatter.title}
-      description={frontmatter.description}
-      heroImage={frontmatter.heroImage}
+      title={frontmatter.title as string}
+      description={frontmatter.description as string}
+      heroImage={fixPath(frontmatter.heroImage as string)} 
+      imageAlt={frontmatter.imageAlt as string} 
     />
-    <div class="absolute bottom-0 left-0 w-full z-20 leading-[0]">
+    <div class="absolute -bottom-[1px] left-0 w-full z-20 leading-[0] pointer-events-none">
       <WaveDivider fill="#ffffff" position="bottom" class="w-full block" />
     </div>
   </div>
@@ -74,14 +75,14 @@ const aboutParallax = blocks.find((b) => b.kind === "about-parallax") as
                 front={aboutParallax.attrs.front ? fixPath(aboutParallax.attrs.front as string) : undefined}
               >
                 <img 
-                  src="/assets/home/home-hero-portrait.png" 
+                  src="/assets/home/home-hero-portrait.webp" 
                   class="relative z-10 w-full max-w-[300px] sm:max-w-[340px] md:max-w-[380px] h-auto object-contain" 
                   alt="Liam Portrait" 
                 />
               </AboutParallax>
             ) : (
               <img 
-                src="/assets/home/home-hero-portrait.png" 
+                src="/assets/home/home-hero-portrait.webp" 
                 class="w-full max-w-[380px] h-auto rounded-2xl border border-neutral-200/60 shadow-sm object-contain bg-white p-2" 
                 alt="Liam Portrait" 
               />

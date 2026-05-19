@@ -1,55 +1,58 @@
 ---
 interface Props {
   title: string;
-  description: string;
+  description?: string;
   heroImage: string;
+  imageAlt?: string;
 }
 
-const { title, description, heroImage } = Astro.props;
+const { 
+  title, 
+  description, 
+  heroImage, 
+  imageAlt = "Hero illustration" 
+} = Astro.props;
 ---
 
-<section class="bg-[linear-gradient(to_bottom,#F9DABF,#FFC297)] pt-36 md:pt-48 pb-20 md:pb-28">
+<section class="pt-36 md:pt-44 pb-14 md:pb-20 isolate relative">
   <div class="max-w-[1200px] mx-auto px-6 flex flex-col md:flex-row items-center gap-10 md:gap-16">
-    <div class="text-wrap w-full md:w-1/2">
-      <h1 class="font-serif font-medium text-[clamp(2.2rem,5vw,3.8rem)] leading-[1.1] tracking-[-0.02em] text-[#3c3c3c] text-balance">
+    
+    <div class="text-wrap w-full md:w-[48%]">
+      <h1 class="font-serif font-medium text-[clamp(2.0rem,4.5vw,3.4rem)] leading-[1.15] tracking-[-0.02em] text-[#3c3c3c] text-balance">
         {title}
       </h1>
       {description && (
-        <p class="mt-4 text-[1.1rem] leading-relaxed text-[#5a4a3a]">{description}</p>
+        <p class="mt-6 text-xl leading-relaxed text-[#5a4a3a] opacity-90">
+          {description}
+        </p>
       )}
     </div>
-    <div class="media-wrap w-full md:w-1/2">
-      <div class="inline-block w-full">
-        {/* CHANGED: Swapped <video> for <img> to perfectly render the Animated PNG */}
+    
+    <div class="media-wrap w-full md:w-[52%] flex justify-center md:justify-end">
+      <div class="inline-block w-full max-w-[540px] md:max-w-none">
         <img
-         src="/assets/home/home-hero-animation.png"
-         aria-hidden="true"
-         class="w-full h-auto object-contain rounded-xl"
-         alt="Hero Animation"
+          src={heroImage}
+          loading="eager"
+          decoding="async"
+          width="540"
+          height="400"
+          class="w-full h-auto object-contain rounded-xl drop-shadow-sm aspect-[54/40]"
+          alt={imageAlt}
         />
       </div>
     </div>
+
   </div>
 </section>
 
 <style>
   @keyframes slideUpFade {
-    from {
-      opacity: 0;
-      transform: translateY(24px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
   }
-
-  .text-wrap {
-    animation: slideUpFade 0.7s ease forwards;
-  }
-
-  .media-wrap {
-    animation: slideUpFade 0.7s ease 0.15s forwards;
-    opacity: 0;
+  .text-wrap { animation: slideUpFade 0.7s ease forwards; }
+  .media-wrap { animation: slideUpFade 0.7s ease 0.15s forwards; opacity: 0; }
+  @media (prefers-reduced-motion: reduce) {
+    .text-wrap, .media-wrap { animation: none !important; opacity: 1 !important; transform: none !important; }
   }
 </style>
