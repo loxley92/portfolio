@@ -1,10 +1,63 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { parseCaseStudy, resolveCaseStudyPath } from "../lib/parse-case-study";
+import HomeHero from "../components/HomeHero.astro";
+import WaveDivider from "../components/case-study/WaveDivider.astro";
+import ProjectRow from "../components/ProjectRow.astro";
+import AboutParallax from "../components/AboutParallax.astro";
+import MarkdownContent from "../components/case-study/MarkdownContent.astro";
+
+const { frontmatter, blocks } = parseCaseStudy(resolveCaseStudyPath("home.md"));
+const fixPath = (p: string) => (p && !p.startsWith("/") ? `/${p}` : p);
+
+const projectRows = blocks.filter((b) => b.kind === "project-row") as Extract<
+  (typeof blocks)[number],
+  { kind: "project-row" }
+>[];
+
+const aboutParallax = blocks.find((b) => b.kind === "about-parallax") as
+  | Extract<(typeof blocks)[number], { kind: "about-parallax" }>
+  | undefined;
 ---
 
 <BaseLayout title="Liam Oxley — Portfolio">
-  <section class="px-6 py-20 max-w-5xl mx-auto">
-    <h1 class="text-5xl font-semibold tracking-tight">Liam Oxley</h1>
-    <p class="mt-4 text-lg text-neutral-600">Product designer. Case studies coming soon.</p>
-  </section>
+  <HomeHero
+    title={frontmatter.title}
+    description={frontmatter.description}
+    heroImage={frontmatter.heroImage}
+  />
+
+  <WaveDivider position="bottom" fill="#ffffff" class="relative z-20 -mt-1" />
+
+  <div class="bg-white py-20 text-neutral-900 relative z-10">
+    <div class="max-w-[1200px] mx-auto px-6 mb-12">
+      <h2 class="font-serif text-4xl font-medium text-neutral-900">Featured Work</h2>
+    </div>
+    {projectRows.map((block) => (
+      <ProjectRow
+        theme={block.attrs.theme as string}
+        link={block.attrs.link as string}
+        image={block.attrs.image as string}
+        imagePos={block.attrs.imagePos as "left" | "right"}
+        content={block.content || ""}
+      />
+    ))}
+  </div>
+
+  <WaveDivider position="top" fill="#F3F0FA" class="relative z-20 -mb-1" />
+
+  <div class="bg-[#F3F0FA] py-20 relative z-10">
+    <div class="max-w-[1200px] mx-auto px-6">
+      <h2 class="font-serif text-4xl font-medium text-neutral-900 mb-12">About Me</h2>
+      {aboutParallax && (
+        <AboutParallax
+          far={fixPath(aboutParallax.attrs.far as string)}
+          mid={fixPath(aboutParallax.attrs.mid as string)}
+          front={fixPath(aboutParallax.attrs.front as string)}
+        >
+          <MarkdownContent content={aboutParallax.content || ""} reveal={false} />
+        </AboutParallax>
+      )}
+    </div>
+  </div>
 </BaseLayout>

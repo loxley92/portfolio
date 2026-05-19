@@ -1,0 +1,71 @@
+---
+import MarkdownContent from "./case-study/MarkdownContent.astro";
+
+interface Props {
+  theme: string;
+  link: string;
+  image: string;
+  imagePos?: "left" | "right";
+  content: string;
+}
+
+const { link, image, imagePos = "left", content } = Astro.props;
+const rowDir = imagePos === "left" ? "md:flex-row" : "md:flex-row-reverse";
+
+const h4Match = content.match(/^####\s+(.+)$/m);
+const tags = h4Match
+  ? h4Match[1].split("•").map((s) => s.trim()).filter(Boolean)
+  : [];
+const cleanContent = content.replace(/^####\s+.+\n?/m, "");
+---
+
+<a href={link} class="block group hover:scale-[1.015] transition-all duration-300 ease-out cursor-pointer border-b border-neutral-100/80 last:border-b-0">
+  <div class="w-full max-w-[1200px] mx-auto px-6 py-16">
+    <div class={`flex flex-col ${rowDir} items-center gap-12`}>
+      <div class="w-full md:w-[55%]">
+        {tags.length > 0 && (
+          <div class="flex flex-wrap gap-2 mb-4">
+            {tags.map((tag) => (
+              <span class="border border-purple-300 bg-purple-50/40 text-purple-700 text-xs font-sans tracking-wide rounded-full px-3 py-1">
+                {tag}
+              </span>
+            ))}
+          </div>
+        )}
+        <div class="prose prose-lg prose-headings:font-serif prose-h3:text-4xl prose-h3:mt-2 prose-li:marker:text-gray-400">
+          <MarkdownContent content={cleanContent} reveal={false} />
+        </div>
+        <span class="inline-block mt-6 text-sm font-medium text-purple-600 group-hover:text-purple-800 transition-colors duration-200">
+          View More 〰️&gt;
+        </span>
+      </div>
+
+      <div class="w-full md:w-[45%] transition-all duration-500 ease-out group-hover:-translate-y-2 group-hover:scale-[1.02]">
+        <img
+          src={image}
+          alt=""
+          class="reveal-img w-full rounded-2xl object-cover opacity-0 translate-y-8"
+          style="transition: opacity 800ms ease, transform 800ms ease;"
+        />
+      </div>
+    </div>
+  </div>
+</a>
+
+<script>
+  const imgs = document.querySelectorAll<HTMLElement>(".reveal-img");
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const el = entry.target as HTMLElement;
+          el.style.opacity = "1";
+          el.style.transform = "translateY(0)";
+          observer.unobserve(el);
+        }
+      });
+    },
+    { threshold: 0.15 }
+  );
+  imgs.forEach((img) => observer.observe(img));
+</script>

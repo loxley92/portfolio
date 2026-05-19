@@ -13,6 +13,9 @@ import Caption from "./Caption.astro";
 import Stepper from "./Stepper.astro";
 import RelatedProjects from "./RelatedProjects.astro";
 import MarkdownContent from "./MarkdownContent.astro";
+import HomeHero from "../HomeHero.astro";
+import ProjectRow from "../ProjectRow.astro";
+import AboutParallax from "../AboutParallax.astro";
 
 interface Props {
   block: Block;
@@ -23,8 +26,8 @@ interface Props {
 
 const { block, frontmatter } = Astro.props;
 
-// Anchors are injected by renderMarkdown directly onto each <h2>/<h3>,
-// so section-level ids aren't needed here.
+const fixPath = (p: string) => (p && !p.startsWith("/") ? `/${p}` : p);
+
 const isWide = block.section === "wide";
 const isNarrative = block.section === "narrative";
 const isThemeBanner = block.section === "theme-banner";
@@ -32,27 +35,26 @@ const isImageBanner = block.section === "image-banner";
 ---
 
 {block.kind === "home-hero" && (
-  <HomeHero title={frontmatter.title} heroImage={frontmatter.heroImage} />
+  <HomeHero title={frontmatter.title} description={frontmatter.description} heroImage={frontmatter.heroImage} />
 )}
 
 {block.kind === "project-row" && (
-  <ProjectRow 
-    theme={block.attrs.theme as string} 
-    link={block.attrs.link as string} 
-    image={block.attrs.image as string} 
+  <ProjectRow
+    theme={block.attrs.theme as string}
+    link={block.attrs.link as string}
+    image={block.attrs.image as string}
     imagePos={block.attrs.imagePos as "left" | "right"}
-  >
-    <MarkdownContent content={block.content} />
-  </ProjectRow>
+    content={block.content || ""}
+  />
 )}
 
 {block.kind === "about-parallax" && (
-  <AboutParallax 
-    far={block.attrs.far as string} 
-    mid={block.attrs.mid as string} 
-    front={block.attrs.front as string}
+  <AboutParallax
+    far={fixPath(block.attrs.far as string)}
+    mid={fixPath(block.attrs.mid as string)}
+    front={fixPath(block.attrs.front as string)}
   >
-    <MarkdownContent content={block.content} />
+    <MarkdownContent content={block.content || ""} />
   </AboutParallax>
 )}
 

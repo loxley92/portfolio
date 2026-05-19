@@ -1,0 +1,66 @@
+---
+interface Props {
+  far: string;
+  mid: string;
+  front: string;
+}
+
+const { far, mid, front } = Astro.props;
+---
+
+<div class="flex flex-col md:flex-row gap-12 md:gap-16 items-center w-full">
+  <div class="md:w-1/2">
+    <slot />
+  </div>
+
+  <div class="relative w-full md:w-1/2 max-w-[380px] mx-auto md:mx-0 aspect-square parallax-container">
+    <img src={far} aria-hidden="true" class="absolute inset-0 w-full h-full object-contain z-0 layer-far pointer-events-none" />
+    <img src={mid} aria-hidden="true" class="absolute inset-0 w-full h-full object-contain z-10 layer-mid pointer-events-none" />
+    <img src={front} aria-hidden="true" class="absolute inset-0 w-full h-full object-contain z-30 layer-front pointer-events-none" />
+  </div>
+</div>
+
+<style>
+  .layer-far,
+  .layer-mid,
+  .layer-front {
+    will-change: transform;
+  }
+
+  .layer-far {
+    transform: translate3d(calc(var(--mouse-x, 0) * 15px), 0, 0);
+  }
+
+  .layer-mid {
+    transform: translate3d(calc(var(--mouse-x, 0) * 35px), 0, 0);
+  }
+
+  .layer-front {
+    transform: translate3d(calc(var(--mouse-x, 0) * -60px), 0, 0);
+  }
+</style>
+
+<script>
+  if (window.matchMedia("(pointer: fine)").matches) {
+    const container = document.querySelector(".parallax-container") as HTMLElement;
+
+    let targetX = 0;
+    let currentX = 0;
+
+    const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
+
+    window.addEventListener("mousemove", (e) => {
+      targetX = (e.clientX / window.innerWidth) * 2 - 1;
+    });
+
+    const tick = () => {
+      currentX = lerp(currentX, targetX, 0.05);
+      if (container) {
+        container.style.setProperty("--mouse-x", currentX.toString());
+      }
+      requestAnimationFrame(tick);
+    };
+
+    requestAnimationFrame(tick);
+  }
+</script>

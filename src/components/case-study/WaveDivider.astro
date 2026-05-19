@@ -1,12 +1,17 @@
 ---
 interface Props {
   fill?: string;
+  position?: "top" | "bottom";
+  class?: string;
 }
 
-const { fill = "var(--color-page)" } = Astro.props;
+const { fill = "var(--color-page)", position = "bottom", class: className } = Astro.props;
 ---
 
-<div class="w-full leading-[0] overflow-hidden">
+<div
+  class:list={["w-full leading-[0] overflow-hidden", className]}
+  style={position === "top" ? "transform: scaleY(-1);" : ""}
+>
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 1440 100"

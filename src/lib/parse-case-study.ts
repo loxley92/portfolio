@@ -40,7 +40,10 @@ export type Block =
   | (BlockBase & { kind: "image-gallery"; attrs: DirectiveAttrs; content: string })
   | (BlockBase & { kind: "caption"; attrs: DirectiveAttrs; content: string })
   | (BlockBase & { kind: "stepper"; attrs: DirectiveAttrs; content: string })
-  | (BlockBase & { kind: "content-split"; attrs: DirectiveAttrs; content: string });
+  | (BlockBase & { kind: "content-split"; attrs: DirectiveAttrs; content: string })
+  | (BlockBase & { kind: "home-hero"; attrs: DirectiveAttrs; content: string })
+  | (BlockBase & { kind: "project-row"; attrs: DirectiveAttrs; content: string })
+  | (BlockBase & { kind: "about-parallax"; attrs: DirectiveAttrs; content: string });
 
 export interface ParsedCaseStudy {
   frontmatter: Frontmatter;
@@ -188,8 +191,13 @@ const flushBuffer = () => {
       } else if (type === "stepper-success") {
         blocks.push({ ...base, kind: "stepper", attrs, content: transformContent(content) });
       } else if (type === "content-split") {
-        // Here is our new routing rule!
         blocks.push({ ...base, kind: "content-split", attrs, content: transformContent(content) });
+      } else if (type === "home-hero") {
+        blocks.push({ ...base, kind: "home-hero", attrs, content: transformContent(content) });
+      } else if (type === "project-row") {
+        blocks.push({ ...base, kind: "project-row", attrs, content: transformContent(content) });
+      } else if (type === "about-parallax") {
+        blocks.push({ ...base, kind: "about-parallax", attrs, content: transformContent(content) });
       } else {
         if (content) blocks.push({ ...base, kind: "markdown", content: transformContent(content) });
       }

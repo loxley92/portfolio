@@ -11,7 +11,7 @@ heroImage: "/assets/home/home-hero-animation.mp4"
   ## Featured Work
   { type="section-label" }
 
-  { type="project-row", imagePos="right", theme="#F3E8FF", link="/work/navigation", image="/assets/navigation/hero.png" }
+  { type="project-row", imagePos="right", theme="#F3E8FF", link="/work/navigation", image="/assets/navigation/hero.webp" }
   #### IA • Cognitive Load • Scalable System
   ### Restructuring Core Navigation
   Reducing cognitive load by transitioning from nested menus to a scalable hub framework.
@@ -59,5 +59,5 @@ heroImage: "/assets/home/home-hero-animation.mp4"
   
   { type="cta-button", text="Discover My Journey", link="/about" }
 
-  { type="about-parallax", far="shapes-far.png", mid="home-hero-shapes-mid.png", front="home-hero-shapes-front.png" }
+  { type="about-parallax", mid="home-hero-shapes-mid.png", front="home-hero-shapes-front.png" }
   ![](/assets/about/home-hero-portrait.webp)
