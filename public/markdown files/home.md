@@ -52,5 +52,5 @@ Researching ways to improve how cognitively impaired users interact with electro
 { section="about-me", zIndex=30 }
 { type="wave-divider" }
 
-{ type="about-parallax", far="/assets/home/home-hero-shapes-far.png", mid="/assets/home/home-hero-shapes-mid.png", front="/assets/home/home-hero-shapes-front.png" }
+{ type="about-parallax", far="/assets/home/home-hero-shapes-far.svg", front="/assets/home/home-hero-shapes-front.svg" }
 I turn fragile, manual workflows into robust automated systems. I use my background in operations and experience design to fix broken workflows and build digital tools that are as reliable as they are easy to use.

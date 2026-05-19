@@ -22,24 +22,25 @@ const aboutParallax = blocks.find((b) => b.kind === "about-parallax") as
 
 <BaseLayout title="Liam Oxley — Portfolio">
   
-  <HomeHero
-    title={frontmatter.title}
-    description={frontmatter.description}
-    heroImage={frontmatter.heroImage}
-  />
-
-  <div class="bg-[linear-gradient(to_bottom,#F9DABF,#FFC297)] -mt-1 w-full relative z-20 pointer-events-none">
-    <WaveDivider fill="#ffffff" position="bottom" class="w-full" />
+  <div class="relative w-full bg-[linear-gradient(to_bottom,#F9DABF,#FFC297)] pb-24 md:pb-36 overflow-hidden">
+    <HomeHero
+      title={frontmatter.title}
+      description={frontmatter.description}
+      heroImage={frontmatter.heroImage}
+    />
+    <div class="absolute bottom-0 left-0 w-full z-20 leading-[0]">
+      <WaveDivider fill="#ffffff" position="bottom" class="w-full block" />
+    </div>
   </div>
 
-  <div class="bg-white pb-24 pt-12 text-neutral-900 relative z-10">
-    <div class="max-w-[1200px] mx-auto px-6 mb-16">
+  <div class="bg-white pb-32 pt-16 text-neutral-900 relative z-10">
+    <div class="max-w-[1200px] mx-auto px-6 mb-4">
       <h2 class="font-serif text-4xl font-medium text-neutral-900">Featured Work</h2>
     </div>
     
-    <div class="flex flex-col gap-20 max-w-[1200px] mx-auto">
+    <div class="flex flex-col divide-y divide-neutral-100 max-w-[1200px] mx-auto px-6">
       {projectRows.map((block) => (
-        <div class="border-b border-neutral-100 pb-20 last:border-b-0">
+        <div class="py-8 first:pt-0 last:pb-0">
           <ProjectRow
             theme={block.attrs.theme as string}
             link={block.attrs.link as string}
@@ -50,44 +51,43 @@ const aboutParallax = blocks.find((b) => b.kind === "about-parallax") as
         </div>
       ))}
     </div>
+
+    <div class="absolute bottom-0 left-0 w-full z-20 pointer-events-none translate-y-[2px] scale-y-[1.1] origin-bottom">
+      <WaveDivider fill="#F3F0FA" position="bottom" class="w-full" />
+    </div>
   </div>
 
-  <div class="bg-white -mb-1 w-full relative z-20 pointer-events-none">
-    <WaveDivider position="top" fill="#F3F0FA" class="w-full" />
-  </div>
-
-  <div class="bg-[#F3F0FA] pt-12 pb-24 relative z-10">
+  <div class="bg-[#F3F0FA] pt-24 pb-36 relative z-10 overflow-hidden">
     <div class="max-w-[1200px] mx-auto px-6">
       <h2 class="font-serif text-4xl font-medium text-neutral-900 mb-12">About Me</h2>
-      
-      {aboutParallax ? (
-        <div class="flex flex-col md:flex-row gap-12 md:gap-16 items-start">
+      {aboutParallax && (
+        <div class="flex flex-col md:flex-row gap-12 md:gap-16 items-center">
+          
           <div class="md:w-[55%] text-lg leading-relaxed text-neutral-700">
             <MarkdownContent content={aboutParallax.content || ""} reveal={false} />
           </div>
-          <div class="md:w-[45%] flex justify-center max-w-[420px] mx-auto">
-            <AboutParallax
-              far={fixPath(aboutParallax.attrs.far as string)}
-              mid={fixPath(aboutParallax.attrs.mid as string)}
-              front={fixPath(aboutParallax.attrs.front as string)}
-            />
+          
+          <div class="md:w-[45%] relative flex justify-center items-center w-full">
+            {aboutParallax.attrs.front || aboutParallax.attrs.far ? (
+              <AboutParallax
+                far={aboutParallax.attrs.far ? fixPath(aboutParallax.attrs.far as string) : undefined}
+                front={aboutParallax.attrs.front ? fixPath(aboutParallax.attrs.front as string) : undefined}
+              >
+                <img 
+                  src="/assets/home/home-hero-portrait.webp" 
+                  class="relative z-10 w-full max-w-[300px] sm:max-w-[340px] md:max-w-[380px] h-auto rounded-2xl border border-neutral-200/60 shadow-sm object-contain bg-white" 
+                  alt="Liam Portrait" 
+                />
+              </AboutParallax>
+            ) : (
+              <img 
+                src="/assets/home/home-hero-portrait.webp" 
+                class="w-full max-w-[380px] h-auto rounded-2xl border border-neutral-200/60 shadow-sm object-contain bg-white p-2" 
+                alt="Liam Portrait" 
+              />
+            )}
           </div>
-        </div>
-      ) : (
-        /* 🛡️ BULLETPROOF FALLBACK: If your home.md text gets accidentally wiped or broken again, 
-           this manual layout ensures your biography and portraits never vanish from the screen. */
-        <div class="flex flex-col md:flex-row gap-12 md:gap-16 items-start">
-          <div class="md:w-[55%] text-lg leading-relaxed text-neutral-700 space-y-6">
-            <p>
-              I turn fragile, manual workflows into robust automated systems. I use my background in operations and experience design to fix broken workflows and build digital tools that are as reliable as they are easy to use.
-            </p>
-            <a href="/about" class="inline-block text-purple-600 font-medium hover:underline">
-              Discover My Journey 〰️>
-            </a>
-          </div>
-          <div class="md:w-[45%] flex justify-center max-w-[420px] mx-auto">
-             <img src="/assets/home/home-hero-portrait.webp" class="w-full h-auto rounded-2xl border border-neutral-200/50" alt="Liam Portrait" />
-          </div>
+          
         </div>
       )}
     </div>
