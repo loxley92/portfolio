@@ -8,51 +8,99 @@ const { far, front } = Astro.props;
 ---
 
 <div class="relative w-full parallax-container flex justify-center items-center">
-  {/* The Background Shape (Moves +15px) */}
-  {far && <img src={far} aria-hidden="true" class="absolute inset-0 w-full h-full object-contain z-0 layer-far pointer-events-none" />}
+  {/* FAR LAYER */}
+  {far && (
+    <div class="absolute inset-0 z-0 layer-far pointer-events-none flex justify-center items-center">
+      <img src={far} aria-hidden="true" class="w-full h-full object-contain organic-drift-far" />
+    </div>
+  )}
   
-  {/* The Static Center Anchor */}
-  {/* This <slot /> magically pulls in the portrait image from index.astro and keeps it dead still */}
+  {/* STATIC CENTER: Your Portrait */}
   <div class="relative z-10 w-full flex justify-center">
     <slot />
   </div>
 
-  {/* The Foreground Shape (Moves -60px) */}
-  {front && <img src={front} aria-hidden="true" class="absolute inset-0 w-full h-full object-contain z-30 layer-front pointer-events-none" />}
+  {/* FRONT LAYER */}
+  {front && (
+    <div class="absolute inset-0 z-30 layer-front pointer-events-none flex justify-center items-center">
+      <img src={front} aria-hidden="true" class="w-full h-full object-contain organic-drift-front" />
+    </div>
+  )}
 </div>
 
 <style>
-  .layer-far,
-  .layer-front {
-    will-change: transform;
-  }
+  @media (hover: hover) and (pointer: fine) {
+    .layer-far,
+    .layer-front {
+      will-change: transform;
+    }
 
-  .layer-far {
-    transform: translate3d(calc(var(--mouse-x, 0) * 15px), 0, 0);
-  }
+    /* 🖱️ JAVASCRIPT MOUSE TRACKING */
+    .layer-far {
+      transform: translate3d(calc(var(--mouse-x, 0) * 35px), calc(var(--mouse-y, 0) * 35px), 0);
+    }
 
-  .layer-front {
-    transform: translate3d(calc(var(--mouse-x, 0) * -60px), 0, 0);
+    .layer-front {
+      transform: translate3d(calc(var(--mouse-x, 0) * -70px), calc(var(--mouse-y, 0) * -70px), 0);
+    }
+
+    /* 🌬️ WIDE ORGANIC TUMBLE ANIMATIONS */
+    .organic-drift-far {
+      /* Increased to 35s to keep the larger movement feeling slow and fluid */
+      animation: driftFar 35s linear infinite;
+      will-change: transform;
+    }
+
+    .organic-drift-front {
+      /* Increased to 28s */
+      animation: driftFront 28s linear infinite;
+      will-change: transform;
+    }
+
+    /* Massive translation distances applied here. 
+      The shapes will now drift 40px to 60px in every direction while spinning.
+    */
+    @keyframes driftFar {
+      0%   { transform: translate(0px, -40px) rotate(0deg); }
+      25%  { transform: translate(40px, 0px) rotate(90deg); }
+      50%  { transform: translate(0px, 40px) rotate(180deg); }
+      75%  { transform: translate(-40px, 0px) rotate(270deg); }
+      100% { transform: translate(0px, -40px) rotate(360deg); }
+    }
+
+    @keyframes driftFront {
+      0%   { transform: translate(0px, 60px) rotate(0deg); }
+      25%  { transform: translate(-60px, 0px) rotate(-90deg); }
+      50%  { transform: translate(0px, -60px) rotate(-180deg); }
+      75%  { transform: translate(60px, 0px) rotate(-270deg); }
+      100% { transform: translate(0px, 60px) rotate(-360deg); }
+    }
   }
 </style>
 
 <script>
-  if (window.matchMedia("(pointer: fine)").matches) {
+  if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
     const container = document.querySelector(".parallax-container") as HTMLElement;
 
     let targetX = 0;
+    let targetY = 0;
     let currentX = 0;
+    let currentY = 0;
 
     const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 
     window.addEventListener("mousemove", (e) => {
       targetX = (e.clientX / window.innerWidth) * 2 - 1;
+      targetY = (e.clientY / window.innerHeight) * 2 - 1;
     });
 
     const tick = () => {
-      currentX = lerp(currentX, targetX, 0.05);
+      currentX = lerp(currentX, targetX, 0.04);
+      currentY = lerp(currentY, targetY, 0.04);
+      
       if (container) {
         container.style.setProperty("--mouse-x", currentX.toString());
+        container.style.setProperty("--mouse-y", currentY.toString());
       }
       requestAnimationFrame(tick);
     };
