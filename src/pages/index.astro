@@ -26,19 +26,21 @@ const aboutParallax = blocks.find((b) => b.kind === "about-parallax") as
 
 <BaseLayout title="Liam Oxley — Portfolio">
   
-  <div class="relative w-full bg-[linear-gradient(to_bottom,#F9DABF,#FFC297)] overflow-hidden">
+  <div class="sticky top-0 z-0 w-full bg-[linear-gradient(to_bottom,#F9DABF,#FFC297)] overflow-hidden">
     <HomeHero
       title={frontmatter.title as string}
       description={frontmatter.description as string}
       heroImage={fixPath(frontmatter.heroImage as string)} 
-      imageAlt={frontmatter.imageAlt as string} 
+      imageAlt={frontmatter.imageAlt as string || "Liam collaborating at a design table"} 
     />
-    <div class="absolute -bottom-[1px] left-0 w-full z-20 leading-[0] pointer-events-none">
-      <WaveDivider fill="#ffffff" position="bottom" class="w-full block" />
-    </div>
   </div>
 
   <div class="bg-white pb-32 pt-16 text-neutral-900 relative z-10">
+    
+    <div class="absolute bottom-full left-0 w-full z-20 leading-[0] pointer-events-none translate-y-[2px]">
+      <WaveDivider fill="#ffffff" position="bottom" class="w-full block" />
+    </div>
+
     <div class="max-w-[1200px] mx-auto px-6 mb-4">
       <h2 class="font-serif text-4xl font-medium text-neutral-900">Featured Work</h2>
     </div>
@@ -97,4 +99,5 @@ const aboutParallax = blocks.find((b) => b.kind === "about-parallax") as
       )}
     </div>
   </div>
+
 </BaseLayout>
