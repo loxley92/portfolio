@@ -1,7 +1,7 @@
 ---
 title: "Hi, I'm Liam. I design systems that make sense."
 description: "I use my background in operations and experience design to fix broken workflows and build digital tools that are as reliable as they are easy to use."
-heroImage: "/assets/home/home-hero-animation.mp4"
+heroImage: "/assets/home/home-hero-animation.png"
 ---
 
 { type="home-hero", zIndex=10 }

@@ -20,14 +20,12 @@ const { title, description, heroImage } = Astro.props;
     </div>
     <div class="media-wrap w-full md:w-1/2">
       <div class="inline-block w-full">
-        <video
-          src={heroImage}
-          autoplay
-          loop
-          muted
-          playsinline
-          aria-hidden="true"
-          class="w-full h-auto object-contain rounded-xl"
+        {/* CHANGED: Swapped <video> for <img> to perfectly render the Animated PNG */}
+        <img
+         src="/assets/home/home-hero-animation.png"
+         aria-hidden="true"
+         class="w-full h-auto object-contain rounded-xl"
+         alt="Hero Animation"
         />
       </div>
     </div>
