@@ -1,0 +1,20 @@
+---
+import Reveal from "../Reveal.astro";
+import { renderMarkdown } from "../../lib/render-markdown";
+
+interface Props {
+  content: string;
+  reveal?: boolean;
+}
+
+const { content, reveal = true } = Astro.props;
+const html = renderMarkdown(content);
+---
+
+{reveal ? (
+  <Reveal className="prose-narrative">
+    <div set:html={html} />
+  </Reveal>
+) : (
+  <div class="prose-narrative" set:html={html} />
+)}

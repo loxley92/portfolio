@@ -1,0 +1,160 @@
+@import "tailwindcss";
+
+@theme {
+  /* Colors — from design.md §1 */
+  --color-page: #f9f9f9;
+  --color-purple: #4b32a8;
+  --color-divider: #d8d8d8;
+  --color-hero-from: #f9dabf;
+  --color-hero-to: #ffc297;
+  --color-nav-bg: #b9e6ff;
+
+  /* Type — from design.md §2 */
+  --font-serif: "Lora", Georgia, "Times New Roman", serif;
+  --font-sans: "Montserrat", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+/* Container widths — from design.md §3 */
+@utility container-narrative {
+  max-width: 800px;
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+}
+@utility container-wide {
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+}
+
+/* Fluid type — from design.md §2 */
+@utility text-h1 {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+@utility text-h2 {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+@utility text-h3 {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: clamp(1.25rem, 2vw, 1.5rem);
+  line-height: 1.3;
+}
+@utility text-body {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: clamp(1rem, 1.1vw, 1.125rem);
+  line-height: 1.7;
+}
+
+/* Section padding — from design.md §3 */
+@utility section-pad {
+  padding-block: clamp(4rem, 8vw, 8rem);
+}
+
+/* Scroll reveal — fade-in + slide-up */
+.reveal {
+  --reveal-y: 24px;
+  --reveal-delay: 0s;
+  opacity: 0;
+  transform: translateY(var(--reveal-y));
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay);
+  will-change: opacity, transform;
+}
+.reveal.in {
+  opacity: 1;
+  transform: translateY(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal.in {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+html {
+  background: var(--color-page);
+}
+body {
+  font-family: var(--font-sans);
+  color: #1a1a1a;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Lenis required styles */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* Markdown-rendered content inside narrative blocks */
+.prose-narrative h2,
+.prose-narrative h3 {
+  /* Sticky main nav (80px) + sub-nav (~64px) + breathing room */
+  scroll-margin-top: 180px;
+}
+.prose-narrative h2 {
+  @apply text-h2;
+  margin-block: 1.5em 0.6em;
+  padding-bottom: 0.3em;
+  border-bottom: 1px solid var(--color-divider);
+}
+.prose-narrative h3 {
+  @apply text-h3;
+  margin-block: 1.6em 0.5em;
+}
+.prose-narrative p,
+.prose-narrative li {
+  @apply text-body;
+  margin-block: 0.6em;
+}
+.prose-narrative ul {
+  list-style: disc;
+  padding-inline-start: 1.5rem;
+}
+.prose-narrative ol {
+  list-style: decimal;
+  padding-inline-start: 1.5rem;
+}
+.prose-narrative blockquote {
+  @apply text-body;
+  border-left: 3px solid var(--color-purple);
+  padding-inline-start: 1rem;
+  margin-block: 1em;
+  font-style: italic;
+  color: #444;
+}
+.prose-narrative strong {
+  font-weight: 700;
+}
+.prose-narrative a {
+  color: var(--color-purple);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.prose-narrative hr {
+  border: none;
+  border-top: 1px solid var(--color-divider);
+  margin-block: 2em;
+}

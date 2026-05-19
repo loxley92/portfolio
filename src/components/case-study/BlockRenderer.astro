@@ -1,0 +1,120 @@
+---
+import type { Block, Frontmatter } from "../../lib/parse-case-study";
+import ProjectHero from "./ProjectHero.astro";
+import SubNav from "./SubNav.astro";
+import WaveDivider from "./WaveDivider.astro";
+import Narrative from "./Narrative.astro";
+import Wide from "./Wide.astro";
+import ThemeBanner from "./ThemeBanner.astro";
+import ImageBanner from "./ImageBanner.astro";
+import CardGrid from "./CardGrid.astro";
+import ImageGallery from "./ImageGallery.astro";
+import Caption from "./Caption.astro";
+import Stepper from "./Stepper.astro";
+import RelatedProjects from "./RelatedProjects.astro";
+import MarkdownContent from "./MarkdownContent.astro";
+
+interface Props {
+  block: Block;
+  frontmatter: Frontmatter;
+  index: number;
+  allBlocks: Block[];
+}
+
+const { block, frontmatter } = Astro.props;
+
+// Anchors are injected by renderMarkdown directly onto each <h2>/<h3>,
+// so section-level ids aren't needed here.
+const isWide = block.section === "wide";
+const isNarrative = block.section === "narrative";
+const isThemeBanner = block.section === "theme-banner";
+const isImageBanner = block.section === "image-banner";
+---
+
+{block.kind === "project-hero" && (
+  <ProjectHero
+    title={frontmatter.title}
+    description={frontmatter.description}
+    tags={frontmatter.tags}
+    themeColor={frontmatter.themeColor}
+    themeGradient={frontmatter.themeGradient}
+    heroImage={frontmatter.heroImage}
+  />
+)}
+
+{block.kind === "sub-nav" && (
+  <SubNav
+    links={(block.attrs.links as string[]) ?? []}
+    glassmorphism={block.attrs.glassmorphism !== false}
+    themeColor={frontmatter.themeColor}
+  />
+)}
+
+{block.kind === "wave-divider" && (
+  <WaveDivider
+    position={(block.attrs.position as "top" | "bottom") ?? "bottom"}
+    fill={frontmatter.themeColor}
+  />
+)}
+
+{block.kind === "related-projects" && <RelatedProjects />}
+
+{block.kind === "markdown" && isNarrative && (
+  <Narrative content={block.content} />
+)}
+
+{block.kind === "markdown" && isWide && (
+  <Wide>
+    <MarkdownContent content={block.content} />
+  </Wide>
+)}
+
+{block.kind === "markdown" && isThemeBanner && (
+  <ThemeBanner
+    content={block.content}
+    themeColor={frontmatter.themeColor}
+    themeGradient={frontmatter.themeGradient}
+  />
+)}
+
+{block.kind === "markdown" && isImageBanner && (
+  <ImageBanner
+    content={block.content}
+    bgImage={(block.sectionAttrs?.bgImage as string) ?? frontmatter.heroImage}
+  />
+)}
+
+{block.kind === "markdown" && !isNarrative && !isWide && !isThemeBanner && !isImageBanner && (
+  /* Default container — used inside `case-study-body` etc. */
+  <section class="section-pad">
+    <div class="container-narrative">
+      <MarkdownContent content={block.content} />
+    </div>
+  </section>
+)}
+
+{block.kind === "card-grid" && (
+  <Wide>
+    <CardGrid content={block.content} cols={(block.attrs.cols as string) ?? "2"} />
+  </Wide>
+)}
+
+{block.kind === "image-gallery" && (
+  <Wide>
+    <ImageGallery content={block.content} layout={(block.attrs.layout as string) ?? "hero-top"} />
+  </Wide>
+)}
+
+{block.kind === "caption" && (
+  <Wide>
+    <Caption label={(block.attrs.label as string) ?? ""} content={block.content} />
+  </Wide>
+)}
+
+{block.kind === "stepper" && (
+  <section class="section-pad">
+    <div class="container-narrative">
+      <Stepper content={block.content} />
+    </div>
+  </section>
+)}

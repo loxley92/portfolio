@@ -1,0 +1,24 @@
+---
+import Reveal from "../Reveal.astro";
+import { extractFirstImage } from "../../lib/render-markdown";
+
+interface Props {
+  label: string;
+  content: string;
+}
+
+const { label, content } = Astro.props;
+const img = extractFirstImage(content);
+---
+
+<Reveal as="figure" className="flex flex-col gap-3">
+  <p class="text-xs uppercase tracking-[0.12em] font-sans font-bold text-neutral-500">{label}</p>
+  {img && (
+    <img
+      src={img.src}
+      alt={img.alt || label}
+      loading="lazy"
+      class="w-full h-auto rounded-xl"
+    />
+  )}
+</Reveal>

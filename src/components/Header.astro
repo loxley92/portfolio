@@ -1,0 +1,80 @@
+---
+import { site } from "../lib/site-config";
+
+const navLinks = site.primaryNav;
+---
+
+<header
+  class="sticky top-0 left-0 right-0 z-50 w-full px-6 py-5 flex items-center justify-between bg-page transition-transform duration-300 ease-out"
+  data-header
+>
+  <a href="/" class="flex items-center gap-2" aria-label={site.name}>
+    <img src="/assets/global/logo.svg" alt={site.name} width="32" height="32" />
+  </a>
+  <nav class="flex gap-6 text-sm">
+    {navLinks.map((link) => (
+      <a href={link.href} class="hover:underline underline-offset-4">{link.label}</a>
+    ))}
+  </nav>
+</header>
+
+<script>
+  // Smart-reveal header. Hide on scroll-down past header height, show on scroll-up.
+  // Publishes its current height to `--header-offset` so the SubNav can shift down
+  // when the header is visible.
+  const header = document.querySelector<HTMLElement>("[data-header]");
+  if (header) {
+    const root = document.documentElement;
+    const setOffset = (px: number) =>
+      root.style.setProperty("--header-offset", `${px}px`);
+
+    let lastY = window.scrollY;
+    let hidden = false;
+    let ticking = false;
+
+    const HIDE_CLASS = "-translate-y-full";
+    const DELTA = 4; // ignore tiny scroll jitter
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    function update() {
+      ticking = false;
+      const y = window.scrollY;
+      const dy = y - lastY;
+      const h = header!.offsetHeight;
+
+      if (Math.abs(dy) < DELTA) return;
+
+      if (dy > 0 && y > h && !hidden) {
+        header!.classList.add(HIDE_CLASS);
+        hidden = true;
+        setOffset(0);
+      } else if (dy < 0 && hidden) {
+        header!.classList.remove(HIDE_CLASS);
+        hidden = false;
+        setOffset(h);
+      }
+      // Force visible at very top
+      if (y <= 0 && hidden) {
+        header!.classList.remove(HIDE_CLASS);
+        hidden = false;
+        setOffset(h);
+      }
+
+      lastY = y;
+    }
+
+    function onScroll() {
+      if (reduce) return;
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(update);
+      }
+    }
+
+    // Initial publish so SubNav's `top: var(--header-offset)` resolves correctly
+    // before the user has scrolled.
+    setOffset(header.offsetHeight);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", () => setOffset(hidden ? 0 : header!.offsetHeight));
+  }
+</script>

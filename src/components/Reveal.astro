@@ -1,0 +1,28 @@
+---
+/**
+ * Fade-in + slide-up scroll reveal.
+ * Same visual spec as the old framer-motion version: opacity 0→1, y 24→0,
+ * 0.7s, cubic-bezier(0.22, 1, 0.36, 1), staggered via `delay`.
+ *
+ * The IntersectionObserver is set up once in BaseLayout. This component just
+ * marks the element with [data-reveal] and optional --reveal-delay.
+ */
+interface Props {
+  delay?: number;
+  y?: number;
+  as?: "div" | "section" | "article" | "figure" | "li" | "span";
+  className?: string;
+}
+
+const { delay = 0, y = 24, as = "div", className = "" } = Astro.props;
+const Tag = as as any;
+
+const styleParts: string[] = [];
+if (delay) styleParts.push(`--reveal-delay: ${delay}s`);
+if (y !== 24) styleParts.push(`--reveal-y: ${y}px`);
+const style = styleParts.length ? styleParts.join("; ") : undefined;
+---
+
+<Tag class:list={["reveal", className]} style={style} data-reveal>
+  <slot />
+</Tag>

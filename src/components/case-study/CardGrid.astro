@@ -1,0 +1,38 @@
+---
+import Reveal from "../Reveal.astro";
+import { renderMarkdown } from "../../lib/render-markdown";
+
+interface Props {
+  content: string;
+  cols?: string | number;
+}
+
+const { content, cols = 2 } = Astro.props;
+const colCount = Number(cols) || 2;
+
+// Cards are separated by `---` (horizontal rule) at the top level
+const cards = content
+  .split(/^\s*---\s*$/m)
+  .map((c) => c.trim())
+  .filter(Boolean);
+---
+
+<div
+  class="grid gap-6"
+  style={`grid-template-columns: repeat(${colCount}, minmax(0, 1fr));`}
+>
+  {cards.map((card, i) => (
+    <Reveal delay={i * 0.06} className="rounded-2xl bg-white p-5 shadow-[0_4px_24px_-12px_rgba(0,0,0,0.15)]">
+      <div class="prose-narrative" set:html={renderMarkdown(card)} />
+    </Reveal>
+  ))}
+</div>
+
+<style>
+  /* Stack on smaller screens regardless of inline grid-template-columns */
+  @media (max-width: 640px) {
+    div.grid {
+      grid-template-columns: 1fr !important;
+    }
+  }
+</style>

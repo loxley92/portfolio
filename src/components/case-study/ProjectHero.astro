@@ -1,0 +1,46 @@
+---
+import Reveal from "../Reveal.astro";
+
+interface Props {
+  title: string;
+  description: string;
+  tags: string[];
+  themeColor: string;
+  themeGradient: string;
+  heroImage: string;
+}
+
+const { title, description, tags, themeColor, themeGradient, heroImage } = Astro.props;
+const bg = themeGradient || themeColor;
+---
+
+<header
+  class="relative w-full section-pad overflow-hidden"
+  style={`background: ${bg};`}
+>
+  <div class="container-wide grid gap-10 md:grid-cols-[1.1fr_1fr] items-center">
+    <Reveal className="flex flex-col gap-6" as="div">
+      <div class="flex flex-wrap gap-2">
+        {tags.map((tag) => (
+          <span class="text-xs uppercase tracking-wider font-sans font-bold px-3 py-1 rounded-full border border-neutral-900/15 bg-white/40 backdrop-blur-sm">
+            {tag}
+          </span>
+        ))}
+      </div>
+      <h1 class="text-h1">{title}</h1>
+      <p class="text-body max-w-[55ch]">{description}</p>
+    </Reveal>
+
+    {heroImage && (
+      <Reveal delay={0.15} as="figure" className="relative">
+        <img
+          src={heroImage}
+          alt={`${title} hero`}
+          width={1200}
+          loading="eager"
+          class="w-full h-auto rounded-2xl shadow-[0_20px_60px_-20px_rgba(0,0,0,0.25)]"
+        />
+      </Reveal>
+    )}
+  </div>
+</header>

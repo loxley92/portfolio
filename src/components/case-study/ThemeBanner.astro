@@ -1,0 +1,18 @@
+---
+import MarkdownContent from "./MarkdownContent.astro";
+
+interface Props {
+  content: string;
+  themeColor?: string;
+  themeGradient?: string;
+}
+
+const { content, themeColor = "#e5eda2", themeGradient } = Astro.props;
+const bg = themeGradient || themeColor;
+---
+
+<section class="w-full section-pad" style={`background: ${bg};`}>
+  <div class="container-narrative text-center">
+    <MarkdownContent content={content} />
+  </div>
+</section>

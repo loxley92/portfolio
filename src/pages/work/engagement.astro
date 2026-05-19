@@ -1,0 +1,13 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import BlockRenderer from "../../components/case-study/BlockRenderer.astro";
+import { parseCaseStudy, resolveCaseStudyPath } from "../../lib/parse-case-study";
+
+const { frontmatter, blocks } = parseCaseStudy(resolveCaseStudyPath("engagement.MD"));
+---
+
+<BaseLayout title={`${frontmatter.title} — Liam Oxley`} description={frontmatter.description}>
+  {blocks.map((block, i) => (
+    <BlockRenderer block={block} frontmatter={frontmatter} index={i} allBlocks={blocks} />
+  ))}
+</BaseLayout>

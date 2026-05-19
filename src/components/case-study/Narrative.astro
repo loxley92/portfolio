@@ -1,0 +1,15 @@
+---
+import MarkdownContent from "./MarkdownContent.astro";
+
+interface Props {
+  content: string;
+}
+
+const { content } = Astro.props;
+---
+
+<section class="section-pad">
+  <div class="container-narrative">
+    <MarkdownContent content={content} />
+  </div>
+</section>

@@ -1,0 +1,55 @@
+---
+import Reveal from "../Reveal.astro";
+import { renderMarkdown } from "../../lib/render-markdown";
+
+interface Props {
+  content: string;
+}
+
+const { content } = Astro.props;
+
+// Parse the numbered list. Each item starts with `1. **Title:** body` and may be
+// followed by `> 💡 tip` lines underneath.
+const lines = content.split("\n");
+type Step = { title: string; body: string; tip?: string };
+const steps: Step[] = [];
+let current: Step | null = null;
+
+for (const line of lines) {
+  const stepMatch = line.match(/^\s*(\d+)\.\s+\*\*([^*]+)\*\*\s*(.*)$/);
+  if (stepMatch) {
+    if (current) steps.push(current);
+    current = { title: stepMatch[2].replace(/:$/, ""), body: stepMatch[3].trim() };
+    continue;
+  }
+  const tipMatch = line.match(/^\s*>\s*💡?\s*(.*)$/);
+  if (tipMatch && current) {
+    current.tip = (current.tip ? current.tip + " " : "") + tipMatch[1];
+    continue;
+  }
+  if (current && line.trim()) {
+    current.body += " " + line.trim();
+  }
+}
+if (current) steps.push(current);
+---
+
+<ol class="grid gap-5 list-none">
+  {steps.map((step, i) => (
+    <Reveal delay={i * 0.08} as="div" className="flex gap-5 rounded-2xl bg-white p-5 shadow-[0_4px_24px_-12px_rgba(0,0,0,0.1)]">
+      <div class="flex-shrink-0 w-10 h-10 rounded-full bg-purple text-white font-sans font-bold flex items-center justify-center" style="background-color: var(--color-purple);">
+        {i + 1}
+      </div>
+      <div class="flex-1">
+        <h4 class="text-h3 mb-1">{step.title}</h4>
+        <div class="prose-narrative" set:html={renderMarkdown(step.body)} />
+        {step.tip && (
+          <div class="mt-3 rounded-lg bg-neutral-100 px-4 py-3 text-sm font-sans">
+            <span class="font-bold">💡 </span>
+            <span set:html={renderMarkdown(step.tip).replace(/^<p>|<\/p>$/g, "")} />
+          </div>
+        )}
+      </div>
+    </Reveal>
+  ))}
+</ol>

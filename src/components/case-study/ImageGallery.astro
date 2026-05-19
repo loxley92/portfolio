@@ -1,0 +1,45 @@
+---
+import Reveal from "../Reveal.astro";
+
+interface Props {
+  content: string;
+  layout?: string;
+}
+
+const { content, layout = "hero-top" } = Astro.props;
+
+// Extract every markdown image
+const imgRe = /!\[([^\]]*)\]\(([^)]+)\)/g;
+const images: { alt: string; src: string }[] = [];
+let m: RegExpExecArray | null;
+while ((m = imgRe.exec(content)) !== null) {
+  images.push({ alt: m[1], src: m[2] });
+}
+
+const [hero, ...rest] = images;
+---
+
+{layout === "hero-top" && hero ? (
+  <div class="flex flex-col gap-6">
+    <Reveal as="figure">
+      <img src={hero.src} alt={hero.alt} loading="lazy" class="w-full h-auto rounded-2xl" />
+    </Reveal>
+    {rest.length > 0 && (
+      <div class="grid gap-6 sm:grid-cols-2">
+        {rest.map((img, i) => (
+          <Reveal delay={i * 0.08} as="figure">
+            <img src={img.src} alt={img.alt} loading="lazy" class="w-full h-auto rounded-xl" />
+          </Reveal>
+        ))}
+      </div>
+    )}
+  </div>
+) : (
+  <div class="grid gap-6 sm:grid-cols-2">
+    {images.map((img, i) => (
+      <Reveal delay={i * 0.08} as="figure">
+        <img src={img.src} alt={img.alt} loading="lazy" class="w-full h-auto rounded-xl" />
+      </Reveal>
+    ))}
+  </div>
+)}

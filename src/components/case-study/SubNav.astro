@@ -1,0 +1,158 @@
+---
+interface Props {
+  links: string[];
+  glassmorphism?: boolean;
+  themeColor?: string;
+}
+
+const { links, glassmorphism = true } = Astro.props;
+
+const slugify = (s: string) =>
+  s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+---
+
+<nav
+  class:list={[
+    "sticky z-40 w-full transition-[top] duration-300 ease-out",
+    glassmorphism
+      ? "bg-white/70 backdrop-blur-md border-y border-white/40"
+      : "bg-white border-b border-neutral-200",
+  ]}
+  style="top: var(--header-offset, 0px);"
+  data-sub-nav
+>
+  <ul class="container-wide flex gap-2 sm:gap-6 overflow-x-auto py-5">
+    {links.map((label) => {
+      const slug = slugify(label);
+      return (
+        <li>
+          <a
+            href={`#${slug}`}
+            data-sub-nav-link={slug}
+            class="block px-3 py-1.5 text-sm font-sans font-bold whitespace-nowrap text-neutral-700 hover:text-neutral-900 transition-colors"
+          >
+            {label}
+          </a>
+        </li>
+      );
+    })}
+  </ul>
+</nav>
+
+<script>
+  const links = Array.from(
+    document.querySelectorAll<HTMLAnchorElement>("[data-sub-nav-link]"),
+  );
+
+  // Active-state classes per spec
+  const ACTIVE_CLASSES = ["bg-purple-600", "text-white", "rounded-full"];
+
+  function setActive(slug: string | null) {
+    for (const a of links) {
+      const isActive = a.dataset.subNavLink === slug;
+      for (const c of ACTIVE_CLASSES) a.classList.toggle(c, isActive);
+      a.setAttribute("aria-current", isActive ? "true" : "false");
+    }
+  }
+
+  // Resolve each link to a target heading on the page
+  type Target = { el: HTMLElement; slug: string; order: number };
+  const targets: Target[] = [];
+  links.forEach((a, i) => {
+    const slug = a.dataset.subNavLink;
+    if (!slug) return;
+    const el = document.getElementById(slug);
+    if (el) targets.push({ el, slug, order: i });
+  });
+
+  // IntersectionObserver scroll-spy. The thin band 30–35% from viewport top is
+  // the "active" zone — whichever section's heading currently sits in that band
+  // wins. Falls back to the last section scrolled past.
+  if (targets.length > 0) {
+    const visible = new Set<string>();
+    let lastActive: string | null = null;
+
+    const pickActive = () => {
+      if (visible.size === 0) return; // keep previous active
+      // Among visible targets, pick the one nearest the top of the active band
+      let best: Target | null = null;
+      let bestTop = Infinity;
+      for (const t of targets) {
+        if (!visible.has(t.slug)) continue;
+        const top = t.el.getBoundingClientRect().top;
+        if (top < bestTop) {
+          bestTop = top;
+          best = t;
+        }
+      }
+      if (best && best.slug !== lastActive) {
+        lastActive = best.slug;
+        setActive(best.slug);
+      }
+    };
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          const slug = (entry.target as HTMLElement).id;
+          if (entry.isIntersecting) visible.add(slug);
+          else visible.delete(slug);
+        }
+        pickActive();
+      },
+      {
+        rootMargin: "-30% 0px -65% 0px",
+        threshold: 0,
+      },
+    );
+
+    targets.forEach((t) => io.observe(t.el));
+
+    // Edge case: if nothing has been observed-as-intersecting yet (e.g. user
+    // loads page already scrolled past first section), pick the last section
+    // whose top is above the active band.
+    const initFallback = () => {
+      const trigger = window.innerHeight * 0.3;
+      let best: Target | null = null;
+      for (const t of targets) {
+        const top = t.el.getBoundingClientRect().top;
+        if (top <= trigger) best = t;
+      }
+      if (best && best.slug !== lastActive) {
+        lastActive = best.slug;
+        setActive(best.slug);
+      }
+    };
+    initFallback();
+    window.addEventListener("scroll", initFallback, { passive: true, once: true });
+  }
+
+  // Click handler — smooth-scroll via Lenis when available, accounting for the
+  // current header offset so the heading doesn't land under the nav.
+  links.forEach((a) => {
+    a.addEventListener("click", (e) => {
+      const slug = a.dataset.subNavLink;
+      if (!slug) return;
+      const el = document.getElementById(slug);
+      if (!el) return;
+      e.preventDefault();
+
+      const offsetRaw = getComputedStyle(document.documentElement)
+        .getPropertyValue("--header-offset")
+        .trim();
+      const headerOffset = parseInt(offsetRaw, 10) || 0;
+      const subNav = document.querySelector<HTMLElement>("[data-sub-nav]");
+      const subNavH = subNav ? subNav.offsetHeight : 0;
+      const offset = -(headerOffset + subNavH + 12);
+
+      const lenis = (window as any).__lenis;
+      if (lenis && typeof lenis.scrollTo === "function") {
+        lenis.scrollTo(el, { offset });
+      } else {
+        const top = el.getBoundingClientRect().top + window.scrollY + offset;
+        window.scrollTo({ top, behavior: "smooth" });
+      }
+      history.replaceState(null, "", `#${slug}`);
+    });
+  });
+</script>
