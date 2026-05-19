@@ -8,6 +8,10 @@ import AboutParallax from "../components/AboutParallax.astro";
 import MarkdownContent from "../components/case-study/MarkdownContent.astro";
 
 const { frontmatter, blocks } = parseCaseStudy(resolveCaseStudyPath("home.md"));
+
+// 🧪 THE TRUTH SERUM:
+console.log("THE HERO IMAGE IS:", frontmatter.heroImage);
+
 const fixPath = (p: string) => (p && !p.startsWith("/") ? `/${p}` : p);
 
 const projectRows = blocks.filter((b) => b.kind === "project-row") as Extract<
@@ -39,7 +43,7 @@ const aboutParallax = blocks.find((b) => b.kind === "about-parallax") as
       <h2 class="font-serif text-4xl font-medium text-neutral-900">Featured Work</h2>
     </div>
     
-    <div class="flex flex-col divide-y divide-neutral-100 max-w-[1200px] mx-auto px-6">
+    <div class="flex flex-col divide-y divide-neutral-200 max-w-[1200px] mx-auto px-6">
       {projectRows.map((block) => (
         <div class="py-8 first:pt-0 last:pb-0">
           <ProjectRow

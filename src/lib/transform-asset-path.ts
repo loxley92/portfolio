@@ -5,7 +5,7 @@
  */
 export function transformAssetPath(input: string): string {
   if (!input) return input;
-  let out = input.replace(/^\/assets\/projects\//, "/assets/");
-  out = out.replace(/\.(png|jpe?g)(\?.*)?$/i, ".webp$2");
-  return out;
+  const out = input.replace(/^\/assets\/projects\//, "/assets/");
+  if (out === input) return out;
+  return out.replace(/\.(png|jpe?g)(\?.*)?$/i, ".webp$2");
 }
