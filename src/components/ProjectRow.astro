@@ -19,9 +19,9 @@ const tags = h4Match
 const cleanContent = content.replace(/^####\s+.+\n?/m, "");
 ---
 
-<a href={link} class="block group hover:scale-[1.015] transition-all duration-300 ease-out cursor-pointer border-b border-neutral-100/80 last:border-b-0">
+<a href={link} class="block group hover:scale-[1.015] transition-all duration-300 ease-out cursor-pointer border-b border-neutral-100/90 pb-16 last:border-b-0">
   <div class="w-full max-w-[1200px] mx-auto px-6 py-16">
-    <div class={`flex flex-col ${rowDir} items-center gap-12`}>
+    <div class={`flex flex-col ${rowDir} items-start gap-12`}>
       <div class="w-full md:w-[55%]">
         {tags.length > 0 && (
           <div class="flex flex-wrap gap-2 mb-4">
@@ -44,7 +44,7 @@ const cleanContent = content.replace(/^####\s+.+\n?/m, "");
         <img
           src={image}
           alt=""
-          class="reveal-img w-full rounded-2xl object-cover opacity-0 translate-y-8"
+          class="reveal-img w-full h-auto object-contain rounded-2xl border border-neutral-200/70 shadow-sm opacity-0 translate-y-8"
           style="transition: opacity 800ms ease, transform 800ms ease;"
         />
       </div>

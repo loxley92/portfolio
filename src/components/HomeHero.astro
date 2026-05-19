@@ -8,7 +8,7 @@ interface Props {
 const { title, description, heroImage } = Astro.props;
 ---
 
-<section class="bg-[linear-gradient(to_bottom,#F9DABF,#FFC297)] section-pad">
+<section class="bg-[linear-gradient(to_bottom,#F9DABF,#FFC297)] pt-36 md:pt-48 pb-20 md:pb-28">
   <div class="max-w-[1200px] mx-auto px-6 flex flex-col md:flex-row items-center gap-10 md:gap-16">
     <div class="text-wrap w-full md:w-1/2">
       <h1 class="font-serif font-medium text-[clamp(2.2rem,5vw,3.8rem)] leading-[1.1] tracking-[-0.02em] text-[#3c3c3c] text-balance">
@@ -19,7 +19,7 @@ const { title, description, heroImage } = Astro.props;
       )}
     </div>
     <div class="media-wrap w-full md:w-1/2">
-      <div class="mix-blend-multiply bg-transparent inline-block w-full">
+      <div class="inline-block w-full">
         <video
           src={heroImage}
           autoplay

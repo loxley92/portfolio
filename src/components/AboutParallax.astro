@@ -8,16 +8,10 @@ interface Props {
 const { far, mid, front } = Astro.props;
 ---
 
-<div class="flex flex-col md:flex-row gap-12 md:gap-16 items-center w-full">
-  <div class="md:w-1/2">
-    <slot />
-  </div>
-
-  <div class="relative w-full md:w-1/2 max-w-[380px] mx-auto md:mx-0 aspect-square parallax-container">
-    <img src={far} aria-hidden="true" class="absolute inset-0 w-full h-full object-contain z-0 layer-far pointer-events-none" />
-    <img src={mid} aria-hidden="true" class="absolute inset-0 w-full h-full object-contain z-10 layer-mid pointer-events-none" />
-    <img src={front} aria-hidden="true" class="absolute inset-0 w-full h-full object-contain z-30 layer-front pointer-events-none" />
-  </div>
+<div class="relative w-full max-w-[380px] aspect-square parallax-container">
+  <img src={far} aria-hidden="true" class="absolute inset-0 w-full h-full object-contain z-0 layer-far pointer-events-none" />
+  <img src={mid} aria-hidden="true" class="absolute inset-0 w-full h-full object-contain z-10 layer-mid pointer-events-none" />
+  <img src={front} aria-hidden="true" class="absolute inset-0 w-full h-full object-contain z-30 layer-front pointer-events-none" />
 </div>
 
 <style>
