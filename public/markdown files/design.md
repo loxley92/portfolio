@@ -37,7 +37,7 @@
 
 ## 6. Premium Motion & Polish
 - **Smooth Scroll**: Implement Lenis.js for momentum-based scrolling.
-- **Magnetic UI**: All Pill Buttons and Nav Links should have a subtle magnetic pull (Framer Motion).
+- **Magnetic UI**: All Pill Buttons and Nav Links should have a subtle magnetic pull (Vanilla JS & CSS).
 - **Staggered Reveals**: Narrative text blocks should reveal line-by-line or staggered when entering the viewport.
 - **Glassmorphism Detail**: Add a subtle 1px white border (0.1 opacity) to the sticky sub-nav to give it a "sharp" edge against the content.
 - **Image Reveal**: Mask-reveal images with a 1.05x to 1x scale transition on scroll-entry.

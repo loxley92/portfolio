@@ -13,9 +13,11 @@ const src = transformAssetPath(bgImage);
 
 <section
   class="relative w-full section-pad text-white"
-  style={`background-image: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)), url('${src}'); background-size: cover; background-position: center;`}
+  style={`background-image: linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75)), url('${src}'); background-size: cover; background-position: center;`}
 >
-  <div class="container-narrative text-center [&_h2]:text-white [&_h2]:border-white/30 [&_p]:text-white/95">
-    <MarkdownContent content={content} />
-  </div>
+  {/* Added font-bold and drop-shadow here so it pops off the background */}
+  {/* Notice the ! before text-white to force it to override global.css */}
+<div class="container-narrative text-center drop-shadow-md [&_h2]:!text-white/90 [&_h2]:!border-white/20 [&_h3]:!text-white/90 [&_p]:!text-white/90 [&_strong]:!text-white/90">
+  <MarkdownContent content={content} />
+</div>
 </section>

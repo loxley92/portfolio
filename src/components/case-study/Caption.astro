@@ -11,13 +11,17 @@ const { label, content } = Astro.props;
 const img = extractFirstImage(content);
 ---
 
-<Reveal as="figure" className="flex flex-col gap-3">
-  <p class="text-xs uppercase tracking-[0.12em] font-sans font-bold text-neutral-500">{label}</p>
+<Reveal as="figure" className="flex flex-col w-full">
+  <p class="text-xs uppercase tracking-[0.12em] font-sans font-bold text-neutral-500 border-b border-[#d8d8d8] pb-3 mb-5 w-full">
+    {label}
+  </p>
+  
   {img && (
     <img
       src={img.src}
       alt={img.alt || label}
       loading="lazy"
+      /* ADDED: shadow-sm and a subtle border to match the video containers perfectly */
       class="w-full h-auto rounded-xl"
     />
   )}

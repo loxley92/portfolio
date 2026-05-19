@@ -7,9 +7,8 @@ interface Props {
 
 const { content } = Astro.props;
 ---
-
-<section class="section-pad">
-  <div class="container-narrative">
+<div>
+  <div class="container-narrative prose-narrative">
     <MarkdownContent content={content} />
   </div>
-</section>
+</div>

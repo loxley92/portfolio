@@ -1,5 +1,6 @@
 ---
 import Reveal from "../Reveal.astro";
+import WaveDivider from "./WaveDivider.astro"; 
 
 interface Props {
   title: string;
@@ -15,32 +16,44 @@ const bg = themeGradient || themeColor;
 ---
 
 <header
-  class="relative w-full section-pad overflow-hidden"
+  class="relative w-full pt-28 md:pt-40 pb-12 md:pb-16 overflow-hidden"
   style={`background: ${bg};`}
 >
-  <div class="container-wide grid gap-10 md:grid-cols-[1.1fr_1fr] items-center">
-    <Reveal className="flex flex-col gap-6" as="div">
-      <div class="flex flex-wrap gap-2">
+  <div class="container-wide !mt-0 grid gap-12 lg:gap-10 lg:grid-cols-[1.1fr_1fr] items-center">
+    
+    <Reveal className="flex flex-col items-start" as="div">
+      
+      <h1 class="text-h1 mb-2 lg:mb-4">{title}</h1>
+      
+      <p class="text-lg md:text-xl lg:text-2xl max-w-[60ch] leading-relaxed text-neutral-700 lg:text-balance">
+        {description}
+      </p>
+
+      <div class="flex flex-wrap gap-3 mt-6 md:mt-8 lg:mt-12">
         {tags.map((tag) => (
-          <span class="text-xs uppercase tracking-wider font-sans font-bold px-3 py-1 rounded-full border border-neutral-900/15 bg-white/40 backdrop-blur-sm">
+          <span class="text-xs uppercase tracking-wider font-sans font-bold px-4 py-1.5 rounded-full border border-neutral-900/15 bg-white/40 backdrop-blur-sm">
             {tag}
           </span>
         ))}
       </div>
-      <h1 class="text-h1">{title}</h1>
-      <p class="text-body max-w-[55ch]">{description}</p>
+      
     </Reveal>
 
     {heroImage && (
-      <Reveal delay={0.15} as="figure" className="relative">
+      <Reveal delay={0.15} as="figure" className="relative z-20">
         <img
           src={heroImage}
           alt={`${title} hero`}
           width={1200}
           loading="eager"
-          class="w-full h-auto rounded-2xl shadow-[0_20px_60px_-20px_rgba(0,0,0,0.25)]"
+          class="w-full h-auto rounded-2xl [0_20px_60px_-20px]"
         />
       </Reveal>
     )}
+    
+  </div>
+
+ <div class="absolute bottom-0 left-0 w-full z-10 pointer-events-none translate-y-[1px]">
+    <WaveDivider />
   </div>
 </header>

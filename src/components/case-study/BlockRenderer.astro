@@ -31,6 +31,31 @@ const isThemeBanner = block.section === "theme-banner";
 const isImageBanner = block.section === "image-banner";
 ---
 
+{block.kind === "home-hero" && (
+  <HomeHero title={frontmatter.title} heroImage={frontmatter.heroImage} />
+)}
+
+{block.kind === "project-row" && (
+  <ProjectRow 
+    theme={block.attrs.theme as string} 
+    link={block.attrs.link as string} 
+    image={block.attrs.image as string} 
+    imagePos={block.attrs.imagePos as "left" | "right"}
+  >
+    <MarkdownContent content={block.content} />
+  </ProjectRow>
+)}
+
+{block.kind === "about-parallax" && (
+  <AboutParallax 
+    far={block.attrs.far as string} 
+    mid={block.attrs.mid as string} 
+    front={block.attrs.front as string}
+  >
+    <MarkdownContent content={block.content} />
+  </AboutParallax>
+)}
+
 {block.kind === "project-hero" && (
   <ProjectHero
     title={frontmatter.title}
@@ -63,10 +88,27 @@ const isImageBanner = block.section === "image-banner";
   <Narrative content={block.content} />
 )}
 
+{/* Fix the missing wide layout rule for standard markdown text/headings */}
 {block.kind === "markdown" && isWide && (
   <Wide>
-    <MarkdownContent content={block.content} />
+    <div class="prose-narrative max-w-none w-full mb-6">
+      <MarkdownContent content={block.content} />
+    </div>
   </Wide>
+)}
+
+{block.kind === "stepper" && isWide && (
+  <Wide>
+    <div class="my-12">
+      <Stepper content={block.content} />
+    </div>
+  </Wide>
+)}
+
+{block.kind === "stepper" && !isWide && (
+  <div class="container-narrative my-12">
+    <Stepper content={block.content} />
+  </div>
 )}
 
 {block.kind === "markdown" && isThemeBanner && (
@@ -85,12 +127,12 @@ const isImageBanner = block.section === "image-banner";
 )}
 
 {block.kind === "markdown" && !isNarrative && !isWide && !isThemeBanner && !isImageBanner && (
-  /* Default container — used inside `case-study-body` etc. */
-  <section class="section-pad">
-    <div class="container-narrative">
+  /* Restored default markdown block */
+  <div>
+    <div class="container-narrative prose-narrative">
       <MarkdownContent content={block.content} />
     </div>
-  </section>
+  </div>
 )}
 
 {block.kind === "card-grid" && (
@@ -105,16 +147,46 @@ const isImageBanner = block.section === "image-banner";
   </Wide>
 )}
 
-{block.kind === "caption" && (
+{block.kind === "caption" && isWide && (
+  /* If you put it in a wide section in Markdown, it spans wide */
   <Wide>
     <Caption label={(block.attrs.label as string) ?? ""} content={block.content} />
   </Wide>
 )}
 
-{block.kind === "stepper" && (
-  <section class="section-pad">
-    <div class="container-narrative">
-      <Stepper content={block.content} />
+{block.kind === "caption" && !isWide && (
+  /* If you didn't, it tucks safely into the 800px reading column */
+  <div class="container-narrative my-10">
+    <Caption label={(block.attrs.label as string) ?? ""} content={block.content} />
+  </div>
+)}
+
+{block.kind === "content-split" && (
+  <div class="relative w-full max-w-[1000px] mx-auto px-4 py-16">
+    
+    {/* The continuous vertical spine (centered) */}
+    <div class="absolute left-1/2 top-0 bottom-0 w-px bg-neutral-200/60 -translate-x-1/2 hidden md:block"></div>
+
+    {/* The Zig-Zag Layout */}
+    <div class={`flex flex-col md:flex-row gap-12 md:gap-20 items-center relative z-10 [&>div]:flex-1 ${block.attrs.imagePos === "left" ? "md:flex-row-reverse" : ""}`}>
+      
+      {/* Simple, unnumbered anchor dot on the spine */}
+      <div class="absolute left-1/2 -translate-x-1/2 w-4 h-4 rounded-full border-2 border-neutral-200 bg-white hidden md:block"></div>
+      
+      {/* Text Column */}
+      <div class="prose-narrative">
+        <MarkdownContent content={block.content} />
+      </div>
+
+      {/* Image Column */}
+      <div class="w-full">
+        <img 
+          src={block.attrs.image as string} 
+          alt="" 
+          class="w-full h-auto rounded-xl border border-neutral-200/60 shadow-sm" 
+        />
+      </div>
+
     </div>
-  </section>
+  </div>
 )}

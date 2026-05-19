@@ -10,11 +10,10 @@ heroImage: "/assets/projects/stats/hero.png"
 { type="project-hero", zIndex=10 }
 
 { section="case-study-body", zIndex=20 }
-  { type="wave-divider" }
-
+ 
   { 
     type="sub-nav", 
-    links=["Overview", "The Problem", "Architecture", "Implementation"],
+    links=["Overview", "The Problem", "Design and Testing", "Final Release"],
     glassmorphism=true
   }
 
@@ -34,16 +33,16 @@ To design a transparent, intuitive stat grading system that empowers players to 
 
 ### Release Impact
 
-> **Improved Comprehension:** Validated a letter/colour grading system that was universally understood by a global audience.
+> **Improved Comprehension:** Validated a letter and colour grading system that was universally understood by a global audience.
 
-> **Reduced Cognitive Load:** Overhauled the Information Architecture to deliver goal-specific, contextual insights rather than generic popups.
+> **Reduced Cognitive Load:** Restructured the interface to deliver goal-specific, contextual insights rather than generic popups.
 
 > **High Community Sentiment:** The update successfully demystified the breeding maths, resulting in overwhelmingly positive player feedback.
 
 { section="theme-banner" }
 
 ### Execution & Strategy:
-## Process Overview
+## Project Phases
 
 { section="narrative" }
 
@@ -54,10 +53,13 @@ To design a transparent, intuitive stat grading system that empowers players to 
 3. **Prototyping & User Testing:** Rapidly tested the new UI with high-value players, pivoting the "refresh" icon to safe carousel arrows based on direct feedback.
 4. **Implementation & Launch:** Consolidated complex rules into an in-game Breeding Guide and balanced the distribution curve with Game Design before launch.
 
-{ section="wide" }
+{ section="narrative" }
 
 ## The Problem
-Understanding why the existing system was failing player expectations.
+We identified two major pain points with the stat inheritance system during breeding:
+
+* 1. While the system was designed with intentional randomness, the output felt too unpredictable, often leading to player disappointment and frustration.
+* 2. Players had to build complex Excel sheets and keep handwritten notes just to make sense of the game's core breeding loop.
 
 { type="caption", label="Diagram 1.0 - The stat progression system" }
 ![](/assets/projects/stats/stat-table-diagram.png)
@@ -68,66 +70,67 @@ Understanding why the existing system was failing player expectations.
 { section="narrative" }
 
 ### The Player Experience
-Because the UI only surfaced flat numbers, players were left completely in the dark. This lack of transparency caused immense frustration in the community, leading to high friction in a core loop. 
+Because the UI only surfaced flat numbers, players were left completely in the dark regarding their horse's true potential. This lack of transparency caused immense frustration in the community, creating high friction in a core loop. 
 
-To cope, players were forced to create complex, fan-made Excel databases just to track their genetics. 
+To cope, players were forced to create complex, fan-made databases just to track performance. 
 
 { section="wide" }
 
 { type="card-grid", cols="2" }
 
-> *"OK...for sanity's sake I'm just trying to understand what equates to good stats for each level. Is this a good or even decent level 4?"*
+*"OK...for sanity's sake I'm just trying to understand what equates to good stats for each level. Is this a good or even decent level 4?"*
 ![](/assets/projects/stats/problem-community-one.png)
 
 ---
 
-> *"Is this horse good?? I have interest to buy this one..."*
+*"Is this horse good?? I have interest to buy this one..."*
 ![](/assets/projects/stats/problem-community-two.png)
 
 ---
 
-> *"For inexperienced players it is often difficult to know what to look for."*
+*"For inexperienced players it is often difficult to know what to look for."*
 ![](/assets/projects/stats/problem-community-three.png)
 
 ---
 
-> *"Am I the only one obsessed enough to have started a spreadsheet? It's otherwise impossible for me to remember stats and who parented who without having to check."*
+*"Am I the only one obsessed enough to have started a spreadsheet? It's otherwise impossible for me to remember stats and who parented who without having to check."*
 ![](/assets/projects/stats/problem-community-four.png)
 
 { section="theme-banner" }
 
 ### Designing for Clarity:
-## Architecture & Validation
+## Design and Testing
 
 { section="narrative" }
 
 ### The Grading System
 We needed a system that was instantly recognisable without cluttering the UI. We designed a dual-indicator system:
 * **Letter Grading (A+ to D):** Adopted a standard Western educational scale to communicate baseline quality instantly.
-* **Colour Grading:** To ensure universal comprehension for non-Western players, a colour-coding system was layered over the letters.
+* **Colour Grading:** Layered a colour-coding system over the letters to ensure universal comprehension for non-Western players.
 
 ![](/assets/projects/stats/letter-grading.png)
 
 ### Contextual UI
-The old UI was a "one-size-fits-all" popup. I redesigned it to adapt to the player's immediate goals:
+The old UI was a "one-size-fits-all" popup. I redesigned it to adapt to the player's immediate goals depending on what screen they were on:
 
 { section="wide" }
 { type="card-grid", cols="2" }
 
-#### Breeding Screen
+### Breeding Screen
+**Goal: Genetics.** The UI puts the Letter Grades (potential) at the top so players can quickly compare quality for breeding.
 ![](/assets/projects/stats/stat-quality-breed.png)
-Goal: Genetics. The UI puts the Letter Grades (potential) at the top so players can quickly compare quality for breeding.
+
 
 ---
 
-#### Racing Screen
+### Racing Screen
+**Goal: Performance.** The hierarchy flips. It puts the Trained Stats (numbers) at the top, as that’s what matters most during active gameplay.
 ![](/assets/projects/stats/stat-quality-racing.png)
-Goal: Performance. The hierarchy flips. It puts the Trained Stats (numbers) at the top, as that’s what matters most during active gameplay.
 
 { section="narrative" }
 
 ### Consolidating Knowledge
-To keep the main screens clean, we moved the deep-dive technical rules into a dedicated Breeding Guide directly on the screen. This allowed us to keep the stat popups lean and focused on the data, while still providing a "one-stop shop" for players who wanted to understand the full mechanics.
+To keep the main screens clean, we moved the deep-dive technical rules into a dedicated Breeding Guide accessible directly on the screen. This allowed us to keep the stat popups lean and focused on data, while still providing a "one-stop shop" for players who wanted to understand the deeper mechanics.
 
 ![](/assets/projects/stats/breeding-guide.png)
 
@@ -145,17 +148,31 @@ Working with the Games User Research team, we tested the prototype with existing
 { section="theme-banner" }
 
 ### The Outcome:
-## Final Implementation
+## Final Release
 
 { section="narrative" }
 
 ### Official Release
 This overhaul was a major update for the game, completely changing how players engaged with the core loop. To help transition the player base, the studio released an official developer update video highlighting the new mechanics.
 
-<iframe width="100%" height="500" src="https://www.youtube.com/embed/V58RDD25xYM" title="Better Breeding Update" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+{ section="wide" }
 
-### Optimised Distribution Curve
-In collaboration with Game Design, we adjusted the underlying math to generate fairer, more predictable stats. This ensured players were actually rewarded for their effort, balancing user satisfaction with the game's economy.
+<div style="position: relative; padding-bottom: 56.25%; height: 0; border-radius: 0.75rem; overflow: hidden; margin: 2rem 0; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+  <iframe
+    src="https://www.youtube.com/embed/V58RDD25xYM"
+    srcdoc="<style>*{padding:0;margin:0;overflow:hidden}html,body{height:100%;background:#000}img{position:absolute;width:100%;top:0;bottom:0;margin:auto;object-fit:cover;height:100%;transition:opacity 0.2s} .play{position:absolute;width:68px;height:48px;left:50%;top:50%;transform:translate(-50%,-50%);background:rgba(33,33,33,0.9);border-radius:12px;cursor:pointer;transition:background 0.2s} a:hover .play{background:#FF0000} .play::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-40%,-50%);border-style:solid;border-width:10px 0 10px 20px;border-color:transparent transparent transparent #fff;}</style><a href='https://www.youtube.com/embed/V58RDD25xYM?autoplay=1'><img src='https://i.ytimg.com/vi/V58RDD25xYM/maxresdefault.jpg' alt='Better Breeding Update'> <div class='play'></div></a>"
+    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen
+    title="Better Breeding Update"
+    loading="lazy"
+  ></iframe>
+</div>
+
+{ section="narrative" }
+
+### Balancing the Game Economy
+In collaboration with Game Design, we adjusted the underlying math to generate fairer, more predictable stats. This ensured players were actually rewarded for their effort, balancing user satisfaction with the game's monetization economy.
 
 ![](/assets/projects/stats/new-curve.png)
 
@@ -166,22 +183,22 @@ The release successfully demystified the breeding maths. Players immediately und
 
 { type="card-grid", cols="2" }
 
-> *"I have dyscalculia (dyslexia with numbers) and I couldn't cope with stat breeding when I first started the game. Since the stats have been lettered, I am finally able to understand breeding."*
+*"I have dyscalculia (dyslexia with numbers) and I couldn't cope with stat breeding when I first started the game. Since the stats have been lettered, I am finally able to understand breeding."*
 ![](/assets/projects/stats/community-response-one.png)
 
 ---
 
-> *"I look forward to breeding more better stat higher grades, it definitely is SO much better than before."*
+*"I look forward to breeding more better stat higher grades, it definitely is SO much better than before."*
 ![](/assets/projects/stats/community-response-two.png)
 
 ---
 
-> *"The letters make it so easy to choose sires who are strong where the mares might be weak and vice versa."*
+*"The letters make it so easy to choose sires who are strong where the mares might be weak and vice versa."*
 ![](/assets/projects/stats/community-response-three.png)
 
 ---
 
-> *"I'm enjoying the process much better with the new game breeding system... bred her back to the sire and got my 5A+ foal!"*
+*"I'm enjoying the process much better with the new game breeding system... bred her back to the sire and got my 5A+ foal!"*
 ![](/assets/projects/stats/community-response-four.png)
 
 { section="narrative" }
@@ -190,18 +207,15 @@ The release successfully demystified the breeding maths. Players immediately und
 
 While the launch was overwhelmingly positive, making the hidden maths visible naturally exposed the underlying mechanics of the game's Random Number Generation (RNG), which led to new, highly specific community friction:
 
-> *"Why does A + A = B?"*
-![](/assets/projects/stats/community-friction-a-plus-b.jpg) 
+* **"Why does A + A = B?"**
+<div style="max-width: 300px;">
 
-* **The Double-Edged Sword of Transparency:** To support core monetisation and retention, the game requires stat variation; players cannot simply get perfect stats every time. While a game designer did the heavy lifting to tighten the underlying mathematical curve and balance the economy, my challenge was surfacing those mechanics in the UI. Because our new grading system was so legible, deliberate gameplay constraints—like the stat penalty incurred when breeding *up* a grade—became glaringly obvious to players, leading to confusion when two "A+" parents produced a "B" foal. 
-* **Compounding Systems:** In later updates, the studio folded in additional traits and stat bonuses, which compounded the complexity of the letter grading system. This remains an ongoing UX challenge for the product team to balance mechanical depth with interface clarity.
-* **First-Time User Overload:** Analytics showed that badging the new Breeding Guide during the First Time User Experience (FTUE) caused cognitive overload for new players. We successfully patched this in the following release by delaying the badge trigger.
+  ![](/assets/projects/stats/community-friction-a-plus-b.jpg)
+  
+</div>
 
-{ section="wide" }
+* **The Transparency Trade-off:** Making the hidden maths visible also exposed the game's deliberate progression constraints. Because the new UI was so legible, intentional economy friction-like stat penalties when breeding *up* a grade became glaringly obvious, causing new player confusion (e.g., "Why did two A+ parents make a B foal?").
 
-## Continue Reading
+* **Scaling for Complexity:** Later game updates introduced new traits and bonuses that compounded the complexity of the grading system. Balancing increasing mechanical depth with interface clarity remains an ongoing UX challenge for the team.
 
-{ type="related-projects" }
-
-{ section="footer", zIndex=30 }
-  { type="wave-divider", position="top" }
+* **New Player Overload:** Analytics showed that introducing the Breeding Guide during initial onboarding caused cognitive overload. We patched this in a fast-follow update by delaying the UI prompt until players had mastered the basics.

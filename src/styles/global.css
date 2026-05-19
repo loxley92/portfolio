@@ -9,8 +9,14 @@
   --color-hero-to: #ffc297;
   --color-nav-bg: #b9e6ff;
 
-  /* Type — from design.md §2 */
-  --font-serif: "Lora", Georgia, "Times New Roman", serif;
+  /* =========================================
+     LEVER 1: GLOBAL COLORS 
+     Change these hex codes to adjust text darkness instantly across the whole site.
+     ========================================= */
+  --color-text-body: #2a2a2a;    /* Soft charcoal for easy reading (replaces harsh #1a1a1a) */
+  --color-text-heading: #3c3c3c; /* Slightly darker charcoal for headings so they stand out */
+
+ --font-serif: "Lora", Georgia, "Times New Roman", serif;
   --font-sans: "Montserrat", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }
 
@@ -26,25 +32,28 @@
   padding-inline: 1.5rem;
 }
 
-/* Fluid type — from design.md §2 */
+/* =========================================
+   LEVER 2: TYPOGRAPHY SIZE & WEIGHT
+   ========================================= */
 @utility text-h1 {
   font-family: var(--font-serif);
   font-weight: 500;
-  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-size: clamp(2.5rem, 4.5vw, 4.5rem);
   line-height: 1.1;
   letter-spacing: -0.02em;
 }
 @utility text-h2 {
   font-family: var(--font-serif);
-  font-weight: 400;
-  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: 400; /* Lora stays at 400, but the new #333333 color will soften it */
+  font-size: clamp(1.75rem, 4vw, 2.2rem); 
   line-height: 1.2;
   letter-spacing: -0.01em;
 }
 @utility text-h3 {
   font-family: var(--font-sans);
-  font-weight: 700;
-  font-size: clamp(1.25rem, 2vw, 1.5rem);
+  /* DROPPED from 600 to 500: This stops Montserrat from feeling too chunky/bold */
+  font-weight: 550; 
+  font-size: clamp(1.125rem, 2vw, 1.25rem);
   line-height: 1.3;
 }
 @utility text-body {
@@ -86,9 +95,10 @@
 html {
   background: var(--color-page);
 }
+
 body {
   font-family: var(--font-sans);
-  color: #1a1a1a;
+  color: var(--color-text-body); /* Hooks up to your body color lever */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -108,35 +118,54 @@ html.lenis body {
   overflow: hidden;
 }
 
-/* Markdown-rendered content inside narrative blocks */
+/* =========================================
+   MARKDOWN PROSE STYLES
+   ========================================= */
 .prose-narrative h2,
 .prose-narrative h3 {
   /* Sticky main nav (80px) + sub-nav (~64px) + breathing room */
   scroll-margin-top: 180px;
 }
+
 .prose-narrative h2 {
   @apply text-h2;
-  margin-block: 1.5em 0.6em;
+  color: var(--color-text-heading); /* Hooks up to your heading color lever */
+  margin-top: 3.5rem;
+  margin-bottom: 1.5rem;
   padding-bottom: 0.3em;
-  border-bottom: 1px solid var(--color-divider);
+  border-bottom: 1px solid var(--color-divider); /* The underline is back! */
 }
+
 .prose-narrative h3 {
   @apply text-h3;
-  margin-block: 1.6em 0.5em;
+  color: var(--color-text-heading); /* Hooks up to your heading color lever */
+  margin-top: 2.5rem;
+  margin-bottom: 0.75rem;
 }
+
+/* Stitches parsed blocks back together seamlessly */
+.prose-narrative > :first-child {
+  margin-top: 0 !important;
+}
+
 .prose-narrative p,
 .prose-narrative li {
   @apply text-body;
   margin-block: 0.6em;
 }
+
 .prose-narrative ul {
   list-style: disc;
   padding-inline-start: 1.5rem;
+  @apply mt-4 mb-8 space-y-3;
 }
+
 .prose-narrative ol {
   list-style: decimal;
   padding-inline-start: 1.5rem;
+  @apply mt-4 mb-8 space-y-3;
 }
+
 .prose-narrative blockquote {
   @apply text-body;
   border-left: 3px solid var(--color-purple);
@@ -145,16 +174,121 @@ html.lenis body {
   font-style: italic;
   color: #444;
 }
+
 .prose-narrative strong {
   font-weight: 700;
 }
+
 .prose-narrative a {
   color: var(--color-purple);
   text-decoration: underline;
   text-underline-offset: 3px;
 }
+
 .prose-narrative hr {
   border: none;
   border-top: 1px solid var(--color-divider);
   margin-block: 2em;
+}
+
+video {
+  will-change: transform;
+}
+
+/* =========================================
+   LEVER 3: NO-UNDERLINE HEADINGS (For Section Breaks)
+   Apply this class to any container where you want H2s to NOT have lines.
+   ========================================= */
+.hide-h2-lines h2 {
+  border-bottom: none !important;
+  padding-bottom: 0 !important;
+}
+
+/* =========================================
+   GLOBAL BLOCK RHYTHM & SPACING
+   ========================================= */
+
+/* 1. Base Container Margins */
+/* Gives every section 4rem of breathing room by default */
+.container-narrative,
+.container-wide {
+  margin-top: 4rem;
+  margin-bottom: 4rem;
+}
+
+/* 2. Macro Breaks (Chapter Dividers) */
+.prose-narrative h2 {
+  margin-top: 6rem !important;
+}
+.prose-narrative h3 {
+  margin-top: 4rem !important;
+}
+/* Prevents double-spacing if a heading is the very first item */
+.prose-narrative > h2:first-child,
+.prose-narrative > h3:first-child {
+  margin-top: 0 !important;
+}
+/* Stops text blocks from pushing elements away artificially */
+.prose-narrative > *:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* =========================================
+   MICRO RELATIONSHIPS (Connecting blocks)
+   ========================================= */
+
+/* 1. Text introducing Media (The fix for your tight spacing) */
+/* Bumps the gap up to a breathable 3rem (48px) so grids/videos don't crash into text */
+div:has(> .container-narrative) + div:has(> .container-wide),
+.container-narrative + .container-wide {
+  margin-top: 3rem !important; 
+}
+
+/* 2. Media Stack (Two Wide blocks grouped together) */
+div:has(> .container-wide) + div:has(> .container-wide),
+.container-wide + .container-wide {
+  margin-top: 3rem !important;
+}
+
+/* =========================================
+   VIDEO POLISH
+   ========================================= */
+
+/* Applies the soft UI curve strictly to videos, keeps images sharp */
+video {
+  border-radius: 0.75rem;
+  overflow: hidden; 
+  display: block;
+  width: 100%;
+  will-change: transform;
+}
+
+/* =========================================
+   SUBNAV SPACING OVERRIDE
+   ========================================= */
+/* Targets whatever container sits immediately after the Subnav and pulls it up tight */
+[data-sub-nav] + .container-narrative,
+[data-sub-nav] + .container-wide,
+[data-sub-nav] + div {
+  margin-top: 2rem !important; 
+}
+
+/* ---------------------------------------------------------
+ * Markdown Image Spacing Fix
+ * --------------------------------------------------------- */
+
+/* 1. Force all markdown images to behave as block elements with exact 2rem spacing */
+.prose-narrative img {
+  display: block;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.75rem; 
+}
+
+/* 2. Prevent margin-doubling if your Markdown parser wraps images in <p> tags */
+.prose-narrative p:has(> img:only-child) {
+  margin-top: 0;
+  margin-bottom: 0;
 }

@@ -5,7 +5,7 @@ import BlockRenderer from "../../components/case-study/BlockRenderer.astro";
 import RelatedProjects from "../../components/case-study/RelatedProjects.astro"; 
 import { parseCaseStudy, resolveCaseStudyPath } from "../../lib/parse-case-study";
 
-const { frontmatter, blocks } = parseCaseStudy(resolveCaseStudyPath("engagement.MD"));
+const { frontmatter, blocks } = parseCaseStudy(resolveCaseStudyPath("stats.MD"));
 ---
 
 <BaseLayout title={`${frontmatter.title} — Liam Oxley`} description={frontmatter.description}>
@@ -14,6 +14,6 @@ const { frontmatter, blocks } = parseCaseStudy(resolveCaseStudyPath("engagement.
   ))}
   
   {/* 2. Drop it at the very bottom, inside the BaseLayout, and tell it where we are! */}
-  <RelatedProjects currentSlug="engagement" />
+  <RelatedProjects currentSlug="stats" />
   
 </BaseLayout>

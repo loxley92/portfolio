@@ -8,48 +8,120 @@ interface Props {
 
 const { content } = Astro.props;
 
-// Parse the numbered list. Each item starts with `1. **Title:** body` and may be
-// followed by `> 💡 tip` lines underneath.
-const lines = content.split("\n");
-type Step = { title: string; body: string; tip?: string };
-const steps: Step[] = [];
-let current: Step | null = null;
+// 1. AUTO-GRID MAGIC: Split content into columns anytime it sees "### "
+const rawColumns = content.split(/(?=^\s*###\s+)/m).filter(c => c.trim().length > 0);
 
-for (const line of lines) {
-  const stepMatch = line.match(/^\s*(\d+)\.\s+\*\*([^*]+)\*\*\s*(.*)$/);
-  if (stepMatch) {
-    if (current) steps.push(current);
-    current = { title: stepMatch[2].replace(/:$/, ""), body: stepMatch[3].trim() };
-    continue;
+// 2. Parse each column individually
+const columns = rawColumns.map(colContent => {
+  const lines = colContent.split("\n");
+  let colTitle = "";
+
+  // Extract the H3 heading for the column title
+  if (lines[0] && lines[0].trim().startsWith("### ")) {
+    colTitle = lines[0].replace("###", "").trim();
+    lines.shift(); 
   }
-  const tipMatch = line.match(/^\s*>\s*💡?\s*(.*)$/);
-  if (tipMatch && current) {
-    current.tip = (current.tip ? current.tip + " " : "") + tipMatch[1];
-    continue;
+
+  type CalloutType = "tip" | "warning" | "action";
+  type Callout = { type: CalloutType; text: string };
+  type Step = { title: string; body: string; callouts: Callout[] };
+
+  const steps: Step[] = [];
+  let current: Step | null = null;
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+
+    const stepMatch = line.match(/^\s*(\d+)\.\s+(.*)$/);
+    if (stepMatch && !line.trim().startsWith(">")) {
+      if (current) steps.push(current);
+      current = { title: "", body: stepMatch[2], callouts: [] };
+      continue;
+    }
+
+    const blockquoteMatch = line.match(/^\s*>\s*(.*)$/);
+    if (blockquoteMatch && current) {
+      const textContent = blockquoteMatch[1].trim();
+      const calloutMatch = textContent.match(/^(💡|⚠️|⚡)\s*(.*)$/);
+
+      if (calloutMatch) {
+        let type: CalloutType = "tip";
+        if (calloutMatch[1] === "⚠️") type = "warning";
+        if (calloutMatch[1] === "⚡") type = "action";
+        current.callouts.push({ type, text: calloutMatch[2] });
+      } else {
+        if (current.callouts.length > 0) {
+          current.callouts[current.callouts.length - 1].text += "\n" + textContent;
+        } else {
+          current.callouts.push({ type: "tip", text: textContent });
+        }
+      }
+      continue;
+    }
+
+    if (current) {
+      current.body += "\n" + line;
+    }
   }
-  if (current && line.trim()) {
-    current.body += " " + line.trim();
-  }
-}
-if (current) steps.push(current);
+  if (current) steps.push(current);
+
+  return { title: colTitle, steps };
+});
 ---
 
-<ol class="grid gap-5 list-none">
-  {steps.map((step, i) => (
-    <Reveal delay={i * 0.08} as="div" className="flex gap-5 rounded-2xl bg-white p-5 shadow-[0_4px_24px_-12px_rgba(0,0,0,0.1)]">
-      <div class="flex-shrink-0 w-10 h-10 rounded-full bg-purple text-white font-sans font-bold flex items-center justify-center" style="background-color: var(--color-purple);">
-        {i + 1}
-      </div>
-      <div class="flex-1">
-        <h4 class="text-h3 mb-1">{step.title}</h4>
-        <div class="prose-narrative" set:html={renderMarkdown(step.body)} />
-        {step.tip && (
-          <div class="mt-3 rounded-lg bg-neutral-100 px-4 py-3 text-sm font-sans">
-            <span class="font-bold">💡 </span>
-            <span set:html={renderMarkdown(step.tip).replace(/^<p>|<\/p>$/g, "")} />
-          </div>
-        )}
-      </div>
-    </Reveal>
+{/* Responsive Grid */}
+<div class={`grid grid-cols-1 ${columns.length > 1 ? 'md:grid-cols-2 gap-12 lg:gap-20' : ''}`}>
+  {columns.map((col, colIdx) => (
+    <div class="flex flex-col">
+      
+      {/* Column Title: Clean, bold sans-serif */}
+      {col.title && (
+        <div class="mb-8 border-b-2 border-neutral-100 pb-3">
+          <h4 class="text-lg md:text-xl font-bold font-sans text-neutral-800">{col.title}</h4>
+        </div>
+      )}
+
+      <ol class="flex flex-col gap-10 list-none m-0 p-0">
+        {col.steps.map((step, i) => (
+          <Reveal delay={(colIdx * 0.1) + (i * 0.08)} as="li" className="flex gap-4 md:gap-6 items-start">
+            
+            {/* Massive Numbers */}
+            <div class="flex-shrink-0 w-10 md:w-12 text-center font-serif text-5xl md:text-6xl text-neutral-300 leading-[0.8] pt-2">
+              {i + 1}
+            </div>
+            
+            {/* Content Container */}
+            <div class="flex-1 border-l-2 border-neutral-300 pl-5 md:pl-6 pb-4">
+              
+              {/* Natural Markdown Rendering with fixed block-level image spacing */}
+              <div class="prose-narrative mb-5 text-sm md:text-base [&_img]:block [&_img]:mb-8" set:html={renderMarkdown(step.body)} />
+              
+              {/* Callouts */}
+              {step.callouts.length > 0 && (
+                <div class="flex flex-col rounded-r-xl overflow-hidden shadow-sm">
+                  {step.callouts.map((callout) => {
+                    const isWarning = callout.type === "warning";
+                    const isAction = callout.type === "action";
+                    const border = isWarning ? "border-red-400" : isAction ? "border-[#a5d6a7]" : "border-[#7986cb]";
+                    const bg = isWarning ? "bg-red-50" : isAction ? "bg-[#e8f5e9]" : "bg-[#e8eaf6]";
+                    const iconChar = isWarning ? "⚠️" : isAction ? "⚡" : "💡";
+
+                    return (
+                      <div class={`border-l-4 px-4 py-3 text-[14px] font-sans text-neutral-800 ${border} ${bg}`}>
+                        <div class="flex gap-3 items-start">
+                          <span class="flex-shrink-0 text-yellow-500 font-bold text-[17px] mt-[1px]">{iconChar}</span>
+                          <div class="[&>p:first-child]:mt-0 [&>p:last-child]:mb-0 font-medium leading-relaxed" set:html={renderMarkdown(callout.text)} />
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+
+          </Reveal>
+        ))}
+      </ol>
+    </div>
   ))}
-</ol>
+</div>

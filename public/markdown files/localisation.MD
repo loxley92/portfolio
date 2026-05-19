@@ -10,7 +10,6 @@ heroImage: "/assets/projects/localisation/hero.png"
 { type="project-hero", zIndex=10 }
 
 { section="case-study-body", zIndex=20 }
-  { type="wave-divider"}
 
   { 
     type="sub-nav", 
@@ -18,9 +17,9 @@ heroImage: "/assets/projects/localisation/hero.png"
     glassmorphism=true
   }
 
-## Overview
-
 { section="narrative" }
+
+## Overview
 
 * **Company:** PikPok
 * **Duration:** Phase 1 (4 Weeks) & Phase 2 (3 Weeks)
@@ -42,14 +41,19 @@ To design a simplified, scalable localisation process that enables cross-functio
 
 > **Enabled "no-code" updates** by surfacing key Apps Script variables in Google Sheets, allowing cross-functional teams to edit logic without touching raw code.
 
-
 { section="theme-banner" }
 
 ### Execution & Strategy:
 ## Process Overview
+Auditing the existing process to define goals and create an improved workflow.
+
 
 { section="narrative" }
 
+## Rival Stars Localisation Overview
+Rival Stars Horse Racing supports 18 languages and manages over 6,500 unique strings for each language—the largest string database of any project within the organisation.
+
+### Process Overview
 { component="stepper-success" }
 
 1. **Audit & Map:** Evaluated the existing manual pipeline with key stakeholders to identify high-friction bottlenecks and code redundancies.
@@ -57,19 +61,7 @@ To design a simplified, scalable localisation process that enables cross-functio
 3. **Structural Architecture:** Overhauled the spreadsheet UX with strict data validation, contextual views, and a consolidated status system.
 4. **Scaling & Tooling:** Built a macro-level tracking dashboard and adapted the system for a new pre-launch title using dynamic C# constraints.
 
-{ section="wide" }
-
-### Rival Stars Horse Racing:
-## Optimising Existing Process
-
-{ section="narrative" }
-
-Auditing the existing process to define goals and create an improved workflow.
-
-## Rival Stars Localisation Overview
-Rival Stars Horse Racing supports 18 languages and manages over 6,500 unique strings for each language—the largest string database of any project within the organisation.
-
-## Audit
+### Audit
 The first step was to audit the entire process from start to finish. I mapped this with key stakeholders who were involved in the localisation pipeline.
 
 { section="wide" }
@@ -100,21 +92,25 @@ To solve the workflow bottlenecks, I divided the improvements into two categorie
 ### 1. Script Automation
 By writing custom Google Apps Scripts, I removed the most tedious, repetitive tasks from the producers' daily workflow.
 
-{ section="wide" }
+<div style="height: 1.25rem;"></div>
 
-{ type="content-split", imagePos="right", image="/assets/projects/localisation/row-generation.png" }
-#### One-Click Row Generation
-A custom script automates cell formatting and pre-fills standard marketing metadata. 
+**One-Click Row Generation** A custom script automates cell formatting and pre-fills standard marketing metadata. 
 > ⚡ **Impact:** Reduced the row creation process from 8 manual steps down to just 2 clicks.
 
----
+<div style="height: 1.5rem;"></div>
 
-{ type="content-split", imagePos="left", image="/assets/projects/localisation/image-automation.png" }
-#### Automated Image Uploader
-To speed up context documentation, I integrated Google Drive directly into the workspace to eliminate context-switching. The script automatically handles naming conflicts and generates links for the translators.
+![Row Generation](/assets/projects/localisation/row-generation.png)
+
+<div style="height: 4rem;"></div>
+
+**Automated Image Uploader** To speed up context documentation, I integrated Google Drive directly into the workspace to eliminate context-switching.
 > ⚡ **Impact:** Reduced the image upload workflow from 5 steps to 3.
 
-{ section="narrative" }
+<div style="height: 1.5rem;"></div>
+
+![Image Automation](/assets/projects/localisation/image-automation.png)
+
+<div style="height: 2rem;"></div>
 
 ### 2. Structural & Architectural Updates
 Beyond scripts, the spreadsheet itself needed a UX overhaul to reduce cognitive load and prevent broken strings from reaching the game engine.
@@ -127,7 +123,11 @@ Beyond scripts, the spreadsheet itself needed a UX overhaul to reduce cognitive 
 ## Translation Dashboard
 To keep the core String Table lightweight and accessible, I extracted the specialist localisation data and built a dedicated Translation Dashboard.
 
+<div style="height: 1.5rem;"></div>
+
 ![](/assets/projects/localisation/translation-dashboard.png)
+
+<div style="height: 1.5rem;"></div>
 
 * **Separation of Concerns:** Removing complex translation columns from the main table reduced the cognitive load for general team members, encouraging them to confidently add new strings. Meanwhile, the core localisation team gained a focused, distraction-free workspace.
 * **Centralised Visibility:** Instead of forcing the team to sift through thousands of master rows, this dashboard acts as a one-stop shop. It surfaces only actionable data, instantly improving workflow tracking and visibility for all stakeholders.
@@ -138,14 +138,14 @@ Taking what I had learned from the workshop and process mapping, I implemented s
 
 { section="wide" }
 
+---
+<div style="margin-bottom: -2.5rem;"></div>
+
 ### Sending Translations
 
-{ component="stepper-comparison" }
+{ component="stepper-success" }
 
-  { component="stepper-audit" }
-
-  ### Original Process
-
+### Original Process
   1. **Navigate & Search:** Team member goes into the `strings_standard` sheet in the String Table.
 
   2. ![](/assets/projects/localisation/standby-dropdown.png)
@@ -161,8 +161,6 @@ Taking what I had learned from the workshop and process mapping, I implemented s
      > ⚠️ Manual pasting frequently overrides strict data-validation rules and breaks target sheet formatting.
 
   6. **Email Sent:** Leaves Google Sheets entirely, opens an email client, drafts a message, and manually sends it to the translation manager.
-
-  { component="stepper-success" }
 
   ### New Process
 
@@ -183,11 +181,12 @@ Taking what I had learned from the workshop and process mapping, I implemented s
      > 4. Updates the source strings' status to WAITING FOR TRANSLATION.
 
 
+---
+<div style="margin-bottom: -2.5rem;"></div>
+
 ### Receiving Translations
 
-{ component="stepper-comparison" }
-
-  { component="stepper-audit" }
+{ component="stepper-success" }
 
   ### Original Process
 
@@ -205,8 +204,6 @@ Taking what I had learned from the workshop and process mapping, I implemented s
   5. **Final Status Update:** The user returns to the spreadsheet to manually change the status of those strings to "IMPORTED".
      > ⚠️ This was consistently forgotten.
 
-
-  { component="stepper-success" }
 
   ### New Process
 
@@ -231,10 +228,9 @@ Taking what I had learned from the workshop and process mapping, I implemented s
 
 ### Barbie Horse Ride and Rescue:
 ## Ongoing Success
+Adapting and scaling the architecture using Gemini Pro.
 
 { section="narrative" }
-
-Adapting and scaling the architecture using Gemini Pro.
 
 ### 1. Unifying Fragmented Data
 * **The Problem:** The database was initially split across multiple feature tabs, which broke the original script's logic.
@@ -259,12 +255,3 @@ Adapting and scaling the architecture using Gemini Pro.
 
 ### The Final Impact
 By applying UX principles to our internal tools, we established a much more sustainable localisation pipeline. Moving from a fragmented, manual process to a centralised architecture reduced developer overhead, surfaced existing translations to optimise the budget, and created a more reliable handoff between teams. It demonstrated that thoughtful systems design can have just as much impact behind the scenes as it does on the screen.
-
-{ section="wide" }
-
-## Continue Reading
-
-{ type="related-projects" }
-
-{ section="footer", zIndex=30 }
-  { type="wave-divider", position="top" }

@@ -39,7 +39,8 @@ export type Block =
   | (BlockBase & { kind: "card-grid"; attrs: DirectiveAttrs; content: string })
   | (BlockBase & { kind: "image-gallery"; attrs: DirectiveAttrs; content: string })
   | (BlockBase & { kind: "caption"; attrs: DirectiveAttrs; content: string })
-  | (BlockBase & { kind: "stepper"; attrs: DirectiveAttrs; content: string });
+  | (BlockBase & { kind: "stepper"; attrs: DirectiveAttrs; content: string })
+  | (BlockBase & { kind: "content-split"; attrs: DirectiveAttrs; content: string });
 
 export interface ParsedCaseStudy {
   frontmatter: Frontmatter;
@@ -170,13 +171,14 @@ export function parseCaseStudy(absolutePath: string): ParsedCaseStudy {
   let pendingType: { type: string; attrs: DirectiveAttrs } | null = null;
   let buffer: string[] = [];
 
-  const flushBuffer = () => {
+const flushBuffer = () => {
     const content = buffer.join("\n").trim();
     buffer = [];
     if (pendingType) {
       const { type, attrs } = pendingType;
       pendingType = null;
       const base = { section: currentSection, sectionAttrs: currentSectionAttrs };
+      
       if (type === "card-grid") {
         blocks.push({ ...base, kind: "card-grid", attrs, content: transformContent(content) });
       } else if (type === "image-gallery") {
@@ -185,11 +187,15 @@ export function parseCaseStudy(absolutePath: string): ParsedCaseStudy {
         blocks.push({ ...base, kind: "caption", attrs, content: transformContent(content) });
       } else if (type === "stepper-success") {
         blocks.push({ ...base, kind: "stepper", attrs, content: transformContent(content) });
+      } else if (type === "content-split") {
+        // Here is our new routing rule!
+        blocks.push({ ...base, kind: "content-split", attrs, content: transformContent(content) });
       } else {
         if (content) blocks.push({ ...base, kind: "markdown", content: transformContent(content) });
       }
       return;
     }
+    
     if (content) {
       blocks.push({
         kind: "markdown",

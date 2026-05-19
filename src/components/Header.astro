@@ -5,76 +5,105 @@ const navLinks = site.primaryNav;
 ---
 
 <header
-  class="sticky top-0 left-0 right-0 z-50 w-full px-6 py-5 flex items-center justify-between bg-page transition-transform duration-300 ease-out"
+  class="fixed top-0 left-0 right-0 z-50 w-full px-12 py-8 flex items-center justify-between transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] bg-transparent"
   data-header
 >
-  <a href="/" class="flex items-center gap-2" aria-label={site.name}>
-    <img src="/assets/global/logo.svg" alt={site.name} width="32" height="32" />
+  <a href="/" class="transition-transform hover:scale-105 active:scale-95" aria-label={site.name}>
+    <img src="/assets/global/logo.svg" alt={site.name} class="h-9 w-auto" />
   </a>
-  <nav class="flex gap-6 text-sm">
+
+<nav class="flex items-center">
+  <div class="flex gap-2 p-1.5 rounded-full border-2 border-purple/30 bg-purple/5 backdrop-blur-md shadow-sm">
     {navLinks.map((link) => (
-      <a href={link.href} class="hover:underline underline-offset-4">{link.label}</a>
+      <a 
+        href={link.href} 
+        class="px-8 py-0.3 rounded-full text-[1.1rem] font-sans font-bold tracking-tight text-purple transition-all duration-200 hover:bg-purple/10 active:scale-95"
+      >
+        {link.label}
+      </a>
     ))}
-  </nav>
+  </div>
+</nav>
 </header>
 
+
+
 <script>
-  // Smart-reveal header. Hide on scroll-down past header height, show on scroll-up.
-  // Publishes its current height to `--header-offset` so the SubNav can shift down
-  // when the header is visible.
-  const header = document.querySelector<HTMLElement>("[data-header]");
-  if (header) {
-    const root = document.documentElement;
-    const setOffset = (px: number) =>
-      root.style.setProperty("--header-offset", `${px}px`);
+  let lastScroll = window.scrollY;
+  let ticking = false;
+  let isHidden = false;
+  
+  const header = document.querySelector<HTMLElement>("[data-header]"); 
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    let lastY = window.scrollY;
-    let hidden = false;
-    let ticking = false;
+  // The exact glass classes your SubNav uses
+  const glassClasses = ["bg-page/70", "backdrop-blur-md", "border-b", "border-white/40"];
+  // The default classes when sitting at the absolute top of the page
+  const solidClasses = ["border-transparent", "bg-transparent"]; // Adjust if your top hero needs a solid color instead of transparent
 
-    const HIDE_CLASS = "-translate-y-full";
-    const DELTA = 4; // ignore tiny scroll jitter
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+function update() {
+    if (!header) return;
+    const currentScroll = window.scrollY;
 
-    function update() {
-      ticking = false;
-      const y = window.scrollY;
-      const dy = y - lastY;
-      const h = header!.offsetHeight;
-
-      if (Math.abs(dy) < DELTA) return;
-
-      if (dy > 0 && y > h && !hidden) {
-        header!.classList.add(HIDE_CLASS);
-        hidden = true;
-        setOffset(0);
-      } else if (dy < 0 && hidden) {
-        header!.classList.remove(HIDE_CLASS);
-        hidden = false;
-        setOffset(h);
-      }
-      // Force visible at very top
-      if (y <= 0 && hidden) {
-        header!.classList.remove(HIDE_CLASS);
-        hidden = false;
-        setOffset(h);
-      }
-
-      lastY = y;
+    // 1. GLASS EFFECT TOGGLE
+    if (currentScroll > 50) {
+      header.classList.remove(...solidClasses);
+      header.classList.add(...glassClasses);
+    } else {
+      header.classList.remove(...glassClasses);
+      header.classList.add(...solidClasses);
     }
 
-    function onScroll() {
-      if (reduce) return;
-      if (!ticking) {
-        ticking = true;
-        requestAnimationFrame(update);
+    // Measure exactly how many pixels we moved since the last frame
+    const delta = currentScroll - lastScroll;
+
+    // 2. SHOW/HIDE LOGIC
+    if ((window as any).__isJumping) {
+      isHidden = true; // Lock hidden during subnav jumps
+    } else {
+      if (currentScroll <= 50) {
+        isHidden = false; 
+      } 
+      // ==========================================
+      // THE DEADZONE FIX
+      // Only react if the movement is greater than 5 pixels.
+      // This makes the header bulletproof against ghost scrolls.
+      // ==========================================
+      else if (Math.abs(delta) > 5) {
+        if (delta > 0) {
+          isHidden = true;  // Scrolling down
+        } else {
+          isHidden = false; // Scrolling up
+        }
       }
     }
 
-    // Initial publish so SubNav's `top: var(--header-offset)` resolves correctly
-    // before the user has scrolled.
-    setOffset(header.offsetHeight);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", () => setOffset(hidden ? 0 : header!.offsetHeight));
+    // 3. APPLY POSITIONING
+    if (isHidden) {
+      header.classList.add("-translate-y-full");
+      document.documentElement.style.setProperty("--header-offset", "0px");
+    } else {
+      header.classList.remove("-translate-y-full");
+      document.documentElement.style.setProperty("--header-offset", `${header.offsetHeight}px`);
+    }
+
+    lastScroll = currentScroll;
   }
+
+  function onScroll() {
+    if (!ticking) {
+      window.requestAnimationFrame(() => {
+        if (!reduceMotion) update();
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }
+
+  if (!reduceMotion) update();
+
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("resize", () => {
+    if (!reduceMotion) update();
+  });
 </script>

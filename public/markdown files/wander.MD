@@ -4,13 +4,12 @@ description: "Exploring accessibility and usability to prevent cognitively impai
 tags: ["User Research", "Accessibility", "Service Design"]
 themeColor: "#e3feff"
 themeGradient: "linear-gradient(to bottom, #e3feff 0%, #a8dadc 100%)"
-heroImage: "/assets/projects/wandersearch/hero.png"
+heroImage: "/assets/wander/hero.webp"
 ---
 
 { type="project-hero", zIndex=10 }
 
 { section="case-study-body", zIndex=20 }
-  { type="wave-divider" }
 
   { 
     type="sub-nav", 
@@ -55,7 +54,7 @@ To find out what was really causing the device rejection, we couldn't just look 
 
 3. **The Broader Context:** Analysed how WanderSearch fits into the wider 'SafeWalking' framework to ensure our findings could potentially scale to other tracking devices.
 
-{ section="wide" }
+{ section="theme-banner" }
 
 ### Life-Saving Hardware:
 ## The Problem & Context
@@ -66,7 +65,7 @@ To find out what was really causing the device rejection, we couldn't just look 
 The WanderSearch ETD uses radio frequency technology. It is highly effective, low-cost, and has a 6-month battery life. However, it looks institutional. It is distributed by a decentralised network of independent volunteers across New Zealand.
 
 { type="caption", label="The standard WanderSearch pendant and watch variations." }
-![](/assets/projects/wandersearch/device-types.png)
+![](/assets/wander/device-types.webp)
 
 { section="narrative" }
 
@@ -93,29 +92,29 @@ Through our interviews, we discovered that volunteers and caregivers were alread
 
 { type="card-grid", cols="2" }
 
-![](/assets/projects/wandersearch/insight-handbag.png)
-#### **1. Integration over Institutionalisation**
+![](/assets/wander/insight-handbag.webp)
+### **1. Integration over Institutionalisation**
 Integrating the device into commonly worn objects removes the anxiety of unfamiliarity for users with dementia.
 > *"All old ladies have a nice navy handbag because it matches their every outfit. They won't leave home without it, so it's sewn in the handbag."* — Volunteer
 
 ---
 
-![](/assets/projects/wandersearch/insight-minecraft.png)
-#### **2. Aesthetics & Ownership**
+![](/assets/wander/insight-minecraft.webp)
+### **2. Aesthetics & Ownership**
 Autistic users feel a significantly greater sense of ownership when the device's appearance matches their special interests.
 > *"As soon as he saw it was Minecraft colours and he thought it was made just for him—that was it... he was quite happy to put it on."* — Caregiver
 
 ---
 
-![](/assets/projects/wandersearch/insight-conversation.png)
-#### **3. The Power of Language**
+![](/assets/wander/insight-conversation.webp)
+### **3. The Power of Language**
 Users with dementia often don't believe they need a tracking device. Reframing the onboarding conversation is critical for buy-in.
 > *"I think a lot of it is how you approach the conversation and how you phrase things. I think language is really important."* — Ethics Researcher
 
 ---
 
-![](/assets/projects/wandersearch/insight-clock.png)
-#### **4. The 24/7 Myth**
+![](/assets/wander/insight-clock.webp)
+### **4. The 24/7 Myth**
 The official recommendation was 24/7 wear, but forcing this caused sensory overload and claustrophobia.
 > *"She can get quite claustrophobic... taking it off and giving her freedom at home if she needs it [helped]."* — Caregiver
 
@@ -131,13 +130,16 @@ The official recommendation was 24/7 wear, but forcing this caused sensory overl
 Mapping the service journey revealed that our interventions had to happen during the **onboarding phase**. Furthermore, we had to design for the reality of the WanderSearch network: Volunteers are often time-poor, have low resources, and lack formal training.
 
 { type="caption", label="Process mapping to identify key intervention points during onboarding." }
-![](/assets/projects/wandersearch/service-map.png)
+![](/assets/wander/service-map.webp)
 
+{ section="narrative" }
+
+## Final Service Interventions
 Based on our research, we proposed four low-cost, easily deployable solutions focused on collaboration and personalisation:
 
 { section="wide" }
 
-{ type="content-split", imagePos="right", image="/assets/projects/wandersearch/rec-1-conversation.png" }
+{ type="content-split", imagePos="right", image="/assets/wander/rec-1-conversation.webp" }
 ### Recommendation 1: Conversation Guide
 * **Function:** Lists users’ common concerns and provides volunteers with scripts to address them effectively.
 * **Utility:** Doubles as standardised training material for new, time-poor volunteers.
@@ -149,7 +151,7 @@ Based on our research, we proposed four low-cost, easily deployable solutions fo
 
 ---
 
-{ type="content-split", imagePos="left", image="/assets/projects/wandersearch/rec-2-wear-guide.png" }
+{ type="content-split", imagePos="left", image="/assets/wander/rec-2-wear-guide.webp" }
 ### Recommendation 2: "Ways to Wear It" Guide
 * **Function:** Visual prompts listing objects the device can be securely attached to (and how).
 * **Utility:** Doubles as training material for volunteers and sparks adaptation ideas for caregivers.
@@ -161,7 +163,7 @@ Based on our research, we proposed four low-cost, easily deployable solutions fo
 
 ---
 
-{ type="content-split", imagePos="right", image="/assets/projects/wandersearch/rec-3-sleeves.png" }
+{ type="content-split", imagePos="right", image="/assets/wander/rec-3-sleeves.webp" }
 ### Recommendation 3: Device Sleeves
 * **Function:** Cheap, 3D-printed or silicone sleeves that cover the standard WanderSearch pendant.
 * **Utility:** Extremely cheap to produce and can be manufactured in a wide variety of appealing colours.
@@ -173,7 +175,7 @@ Based on our research, we proposed four low-cost, easily deployable solutions fo
 
 ---
 
-{ type="content-split", imagePos="left", image="/assets/projects/wandersearch/rec-4-skins.png" }
+{ type="content-split", imagePos="left", image="/assets/wander/rec-4-skins.webp" }
 ### Recommendation 4: Device Skins
 * **Function:** Heavy-duty, low-maintenance coloured stickers that seamlessly cover the ETD.
 * **Utility:** Incredibly easy for volunteers to stock, carry, and distribute; extremely cheap to produce.
@@ -187,12 +189,3 @@ Based on our research, we proposed four low-cost, easily deployable solutions fo
 
 ### Next Steps
 At the conclusion of the 3-week sprint, we handed our data, contacts, and proposed solutions over to a Master's student for further physical prototyping and direct user testing, while simultaneously sharing the service guides with WanderSearch for immediate interim implementation.
-
-{ section="wide" }
-
-## Continue Reading
-
-{ type="related-projects" }
-
-{ section="footer", zIndex=30 }
-  { type="wave-divider", position="top" }

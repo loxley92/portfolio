@@ -11,8 +11,12 @@ const { content, themeColor = "#e5eda2", themeGradient } = Astro.props;
 const bg = themeGradient || themeColor;
 ---
 
-<section class="w-full section-pad" style={`background: ${bg};`}>
-  <div class="container-narrative text-center">
-    <MarkdownContent content={content} />
+<section class="w-full py-12 md:py-16 my-20 md:my-32 theme-banner-layout" style={`background: ${bg};`}>
+  {/* COMBINED: We kept your prose-narrative & hide-h2-lines, and added the typography overrides! */}
+  <div class="container-narrative prose-narrative hide-h2-lines [&_h2]:!text-4xl md:[&_h2]:!text-5xl [&_h2]:!mt-2 [&_h2]:!mb-6 [&_h3]:!font-normal [&_h3]:!text-neutral-700">
+  <MarkdownContent content={content} />
+</div>
+</section>
+    
   </div>
 </section>

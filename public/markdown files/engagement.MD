@@ -1,6 +1,6 @@
 ---
-title: "Designing for Engagement"
-description: "Elevating Player Engagement and Revenue in Rival Stars Horse Racing Through Strategic Event Design"
+title: "Beyond the Leaderboard"
+description: "Fostering inclusivity and daily play by introducing a non-competitive, reward-driven event system to Rival Stars Horse Racing."
 tags: ["Strategy", "Revenue Growth", "Interaction Design"]
 themeColor: "#e5eda2"
 themeGradient: "linear-gradient(to bottom, #f0f0ce 0%, #e5ef9e 100%)"
@@ -10,7 +10,7 @@ heroImage: "/assets/projects/engagement/hero.png"
 { type="project-hero", zIndex=10 }
 
 { section="case-study-body", zIndex=20 }
-  { type="wave-divider"}
+
 
   { 
     type="sub-nav", 
@@ -46,10 +46,9 @@ We aimed to create a non-competitive, community-driven event to attract a broade
 
 ### Release One:
 ## Testing Our Hypothesis
+Creating an event that is aimed at non-competitive players will attract a broader player base, encourage completion-focused play, and increase revenue.
 
 { section="narrative" }
-
-Creating an event that is aimed at non-competitive players will attract a broader player base, encourage completion-focused play, and increase revenue.
 
 ### Process Overview (4 Weeks)
 
@@ -67,16 +66,13 @@ Creating an event that is aimed at non-competitive players will attract a broade
 ### User Experience & Flow
 Before jumping into high-fidelity designs, we mapped out the core loop to ensure players understood how to progress and claim rewards.
 
+With the logic validated, we established the Information Architecture for the main Event Hub, ensuring the reward track and tasks were the primary focus.
+
 { section="wide" }
 
 { type="caption", label="Diagram 1.0 - User Flow" }
 ![](/assets/projects/engagement/release-one-flow.png)
 
-{ section="narrative" }
-
-With the logic validated, we established the Information Architecture for the main Event Hub, ensuring the reward track and tasks were the primary focus.
-
-{ section="wide" }
 
 { type="caption", label="Diagram 1.2 - Event Home Anatomy" }
 ![](/assets/projects/engagement/release-one-home.png)
@@ -84,27 +80,9 @@ With the logic validated, we established the Information Architecture for the ma
 { section="narrative" }
 
 ## Final Release
-
-### Core Event Loop
-
-{ section="wide" }
-
-<video src="/assets/projects/engagement/release-one-reel.mp4" autoplay loop muted playsinline></video>
-
-{ section="narrative" }
-
-### Contextual Entry Points & Feedback
 To keep the event top of mind without being intrusive, we implemented contextual toasts and badges. These allowed players to track progress organically while performing their standard daily game loops.
 
-{ section="wide" }
-
-<video src="/assets/projects/engagement/toasts.mp4" autoplay loop muted playsinline></video>
-
-{ section="narrative" }
-
-## Release Impact
-
-### Key Metrics & Player Sentiment
+### Release Impact
 
 > **37.46% increase** in average spending per user
 
@@ -115,6 +93,16 @@ To keep the event top of mind without being intrusive, we implemented contextual
 > Increased engagement on our social media channels; players were excited to share their progress and outcomes from the events.
 
 { section="wide" }
+
+<figure class="my-12 w-full">
+  <figcaption class="text-sm font-bold tracking-widest text-neutral-500 uppercase border-b border-[#d8d8d8] pb-3 mb-5 block w-full">Video 1.0 - Main Flow</figcaption>
+  <video src="/assets/projects/engagement/release-one-reel.mp4" autoplay loop muted playsinline class="w-full h-auto rounded-xl shadow-sm border border-neutral-900/5"></video>
+</figure>
+
+<figure class="my-12 w-full">
+  <figcaption class="text-sm font-bold tracking-widest text-neutral-500 uppercase border-b border-[#d8d8d8] pb-3 mb-5 block w-full">Video 1.1 - Toasts</figcaption>
+  <video src="/assets/projects/engagement/toasts.mp4" autoplay loop muted playsinline class="w-full h-auto rounded-xl shadow-sm border border-neutral-900/5"></video>
+</figure>
 
 { type="card-grid", cols="2" }
 
@@ -149,10 +137,9 @@ To keep the event top of mind without being intrusive, we implemented contextual
 
 ### Release Two:
 ## Adding Monetisation Layers
+Due to the success of the initial release, we wanted to iterate on this framework to support a new game mode and create deeper monetisation opportunities.
 
 { section="narrative" }
-
-Due to the success of the initial release, we wanted to iterate on this framework to support a new game mode and create deeper monetisation opportunities.
 
 ### Process Overview (8 Weeks)
 
@@ -168,8 +155,6 @@ Due to the success of the initial release, we wanted to iterate on this framewor
 
 4. **Tech Implementation & Release:** Deployed the expanded event, tracking Live Operations experiments for both Iteration One and Two.
 
----
-
 ## What We Added: Feature & UI Evolution
 
 To accommodate new monetisation layers without cluttering the screen, we adopted an existing in-game paradigm for tabbed navigation. This created a cleaner, adaptable layout that allowed us to introduce new features while leaving room for future A/B testing.
@@ -177,26 +162,21 @@ To accommodate new monetisation layers without cluttering the screen, we adopted
 ### 1. The Event Store & Tabbed Navigation
 We introduced an **Event Store** (Star Club) featuring additional purchases for in-app currency (Gold) that offered a variety of event progression benefits. The new tabbed architecture provided the necessary screen real estate to display these offers alongside tasks and key art.
 
-{ section="wide" }
-
-{ type="image-gallery", layout="hero-top" }
-![Tabbed Overview](/assets/projects/engagement/release-two-home.png)
-![Tasks Tab](/assets/projects/engagement/release-two-tasks.png)
-![Star Club Tab](/assets/projects/engagement/release-two-subscription.png)
-
-{ section="narrative" }
-
 ### 2. Premium Rewards & Event Subscription (Race Pass)
 We added an IAP (In-App Purchase) allowing players to access premium rewards and finish the event faster. Introducing this required careful adjustments to the reward track to ensure fairness and clarity.
 
-{ section="wide" }
-
-![](/assets/projects/engagement/reward-track.png)
-
-{ section="narrative" }
-
 * **1. Race Pass Branding:** We added clear visual branding to locked premium tiers. This maintained compliance around new monetisation features and ensured user comprehension.
 * **2. New Points System:** Because the event was now longer, we changed how points were displayed. The UI now focuses on the immediate, achievable milestone rather than the total event goal, which helps maintain player motivation and reduces fatigue.
+
+{ section="wide" }
+
+{ type="image-gallery", layout="hero-top-bottom" }
+![Tabbed Overview](/assets/projects/engagement/release-two-home.png)
+![Tasks Tab](/assets/projects/engagement/release-two-tasks.png)
+![Star Club Tab](/assets/projects/engagement/release-two-subscription.png)
+![Reward Track](/assets/projects/engagement/reward-track.png)
+
+{ section="narrative" }
 
 ## Validating the Premium Experience
 
@@ -219,9 +199,6 @@ Our biggest hurdle was visual clarity on the reward track itself. Initially, pla
 
 Because we were testing iteratively, we were able to redesign the "locked" states mid-testing. By adding a much stronger visual container and explicit "Race Pass" branding to the premium tier, comprehension instantly improved in subsequent sessions.
 
-{ section="wide" }
-{ type="card-grid", cols="2" }
-
 { type="caption", label="Before: Lacking clear premium distinction" }
 ![](/assets/projects/engagement/testing-before.png)
 
@@ -232,22 +209,22 @@ Because we were testing iteratively, we were able to redesign the "locked" state
 
 > **Player Sentiment:** Overall, the introduction of the Steeplechase event and the Race Pass was viewed positively. We learned that providing advance notice via community teasers gave players time to prepare their in-game resources, which mitigated frustration around the new monetisation layers.
 
-{ section="narrative" }
-
 ## Final Implementation
 
 Onboarding followed a familiar structure to the previous Foaling Season event, but featured updated characters and content to reflect the Steeplechase theme. Additionally, the introduction of event-affecting Boosts required new visual feedback states—such as a gold animated progress bar—to clearly indicate to the player when their 2x points multiplier was active.
 
-{ section="wide" }
-
-{ type="caption", label="Video 2.0 - Onboarding, Navigation & Premium Unlocked" }
-<video src="/assets/projects/engagement/release-two-reel.mp4" autoplay loop muted playsinline></video>
-
-{ section="narrative" }
-
 > 💡 **UX Highlight:** At the 0:16 mark, notice how purchasing the Race Pass instantly removes all padlocks on the premium track and updates the button to a "Purchase Complete" state. This provides immediate visual validation for the player's spending.
 
----
+{ section="wide" }
+
+<figure class="w-full">
+  <p class="text-xs uppercase tracking-[0.12em] font-sans font-bold text-neutral-500 border-b border-[#d8d8d8] pb-3 mb-5 w-full">
+    Video 2.0 - Onboarding, Navigation & Premium Unlocked
+  </p>
+  <video src="/assets/engagement/release-two-reel.mp4" autoplay loop muted playsinline controls></video>
+</figure>
+
+{ section="narrative" }
 
 ### Community Response
 
@@ -296,12 +273,3 @@ Onboarding followed a familiar structure to the previous Foaling Season event, b
 { section="image-banner", bgImage="/assets/projects/engagement/outro-full-screen.jpg" }
 
 ## LTEs are now a core pillar of engagement, monetisation, and content strategy - turning events into lasting value.
-
-{ section="wide" }
-
- ## Continue Reading
-
-{ type="related-projects" }
-
-{ section="footer", zIndex=30 }
-  { type="wave-divider", position="top" }

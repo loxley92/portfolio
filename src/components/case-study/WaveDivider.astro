@@ -1,22 +1,21 @@
 ---
 interface Props {
-  position?: "top" | "bottom";
   fill?: string;
 }
 
-const { position = "bottom", fill = "var(--color-page)" } = Astro.props;
+const { fill = "var(--color-page)" } = Astro.props;
 ---
 
-<div class:list={["w-full leading-[0]", position === "top" && "rotate-180"]}>
+<div class="w-full leading-[0] overflow-hidden">
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 1440 100"
     preserveAspectRatio="none"
-    class="block w-full h-[60px]"
+    class="block w-full h-[clamp(40px,5vw,90px)]"
     aria-hidden="true"
   >
     <path
-      d="M0,50 C240,100 480,0 720,40 C960,80 1200,20 1440,60 L1440,100 L0,100 Z"
+      d="M0,50 Q90,15 180,50 T360,50 T540,50 T720,50 T900,50 T1080,50 T1260,50 T1440,50 L1440,100 L0,100 Z"
       fill={fill}
     />
   </svg>
