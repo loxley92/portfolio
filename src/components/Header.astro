@@ -2,31 +2,34 @@
 import { site } from "../lib/site-config";
 
 const navLinks = site.primaryNav;
+const pathname = Astro.url.pathname;
+// Check if we are on the home page (handles both dev and static trailing slashes)
+const isHome = pathname === "/" || pathname === "/index.html";
 ---
 
 <header
-  class="fixed top-0 left-0 right-0 z-50 w-full px-12 py-8 flex items-center justify-between transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] bg-transparent"
-  data-header
+  class={isHome 
+    ? "absolute top-0 left-0 right-0 z-50 w-full px-12 py-8 flex items-center justify-between bg-transparent" 
+    : "fixed top-0 left-0 right-0 z-50 w-full px-12 py-8 flex items-center justify-between transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] bg-transparent"}
+  data-header={!isHome ? "" : undefined}
 >
   <a href="/" class="transition-transform hover:scale-105 active:scale-95" aria-label={site.name}>
     <img src="/assets/global/logo.svg" alt={site.name} class="h-9 w-auto" />
   </a>
 
-<nav class="flex items-center">
-  <div class="flex gap-2 p-1.5 rounded-full border-2 border-purple/30 bg-purple/5 backdrop-blur-md shadow-sm">
-    {navLinks.map((link) => (
-      <a 
-        href={link.href} 
-        class="px-8 py-0.3 rounded-full text-[1.1rem] font-sans font-bold tracking-tight text-purple transition-all duration-200 hover:bg-purple/10 active:scale-95"
-      >
-        {link.label}
-      </a>
-    ))}
-  </div>
-</nav>
+  <nav class="flex items-center">
+    <div class="flex gap-2 p-1.5 rounded-full border-2 border-purple/30 bg-purple/5 backdrop-blur-md shadow-sm">
+      {navLinks.map((link) => (
+        <a 
+          href={link.href} 
+          class="px-8 py-0.3 rounded-full text-[1.1rem] font-sans font-bold tracking-tight text-purple transition-all duration-200 hover:bg-purple/10 active:scale-95"
+        >
+          {link.label}
+        </a>
+      ))}
+    </div>
+  </nav>
 </header>
-
-
 
 <script>
   let lastScroll = window.scrollY;
@@ -36,16 +39,15 @@ const navLinks = site.primaryNav;
   const header = document.querySelector<HTMLElement>("[data-header]"); 
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  // The exact glass classes your SubNav uses
   const glassClasses = ["bg-page/70", "backdrop-blur-md", "border-b", "border-white/40"];
-  // The default classes when sitting at the absolute top of the page
-  const solidClasses = ["border-transparent", "bg-transparent"]; // Adjust if your top hero needs a solid color instead of transparent
+  const solidClasses = ["border-transparent", "bg-transparent"]; 
 
-function update() {
-    if (!header) return;
+  function update() {
+    // 💡 If on the home page, the data-header attribute is gone, so this cleanly exits!
+    if (!header) return; 
+    
     const currentScroll = window.scrollY;
 
-    // 1. GLASS EFFECT TOGGLE
     if (currentScroll > 50) {
       header.classList.remove(...solidClasses);
       header.classList.add(...glassClasses);
@@ -54,31 +56,23 @@ function update() {
       header.classList.add(...solidClasses);
     }
 
-    // Measure exactly how many pixels we moved since the last frame
     const delta = currentScroll - lastScroll;
 
-    // 2. SHOW/HIDE LOGIC
     if ((window as any).__isJumping) {
-      isHidden = true; // Lock hidden during subnav jumps
+      isHidden = true; 
     } else {
       if (currentScroll <= 50) {
         isHidden = false; 
       } 
-      // ==========================================
-      // THE DEADZONE FIX
-      // Only react if the movement is greater than 5 pixels.
-      // This makes the header bulletproof against ghost scrolls.
-      // ==========================================
       else if (Math.abs(delta) > 5) {
         if (delta > 0) {
-          isHidden = true;  // Scrolling down
+          isHidden = true; 
         } else {
-          isHidden = false; // Scrolling up
+          isHidden = false;
         }
       }
     }
 
-    // 3. APPLY POSITIONING
     if (isHidden) {
       header.classList.add("-translate-y-full");
       document.documentElement.style.setProperty("--header-offset", "0px");
@@ -101,7 +95,6 @@ function update() {
   }
 
   if (!reduceMotion) update();
-
   window.addEventListener("scroll", onScroll, { passive: true });
   window.addEventListener("resize", () => {
     if (!reduceMotion) update();

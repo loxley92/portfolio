@@ -9,9 +9,6 @@ import MarkdownContent from "../components/case-study/MarkdownContent.astro";
 
 const { frontmatter, blocks } = parseCaseStudy(resolveCaseStudyPath("home.md"));
 
-// 🧪 THE TRUTH SERUM:
-console.log("THE HERO IMAGE IS:", frontmatter.heroImage);
-
 const fixPath = (p: string) => (p && !p.startsWith("/") ? `/${p}` : p);
 
 const projectRows = blocks.filter((b) => b.kind === "project-row") as Extract<
@@ -26,46 +23,47 @@ const aboutParallax = blocks.find((b) => b.kind === "about-parallax") as
 
 <BaseLayout title="Liam Oxley — Portfolio">
   
-  <div class="sticky top-0 z-0 w-full bg-[linear-gradient(to_bottom,#F9DABF,#FFC297)] overflow-hidden">
-    <HomeHero
-      title={frontmatter.title as string}
-      description={frontmatter.description as string}
-      heroImage={fixPath(frontmatter.heroImage as string)} 
-      imageAlt={frontmatter.imageAlt as string || "Liam collaborating at a design table"} 
-    />
-  </div>
+  <div class="sticky bottom-0 z-10 w-full">
+    
+    <div class="sticky top-0 z-0 w-full bg-[linear-gradient(to_bottom,#F9DABF,#FFC297)] overflow-hidden">
+      <HomeHero
+        title={frontmatter.title as string}
+        description={frontmatter.description as string}
+        heroImage={fixPath(frontmatter.heroImage as string)} 
+        imageAlt={frontmatter.imageAlt as string || "Liam collaborating at a design table"} 
+      />
+    </div>
 
-  <div class="bg-white pb-32 pt-16 text-neutral-900 relative z-10">
+    <div class="bg-white pb-16 pt-16 text-neutral-900 relative z-10 w-full">
+      <div class="absolute bottom-full left-0 w-full z-20 leading-[0] pointer-events-none translate-y-[2px]">
+        <WaveDivider fill="#ffffff" position="bottom" class="w-full block" />
+      </div>
+
+      <div class="max-w-[1200px] mx-auto px-6 mb-4">
+        <h2 class="font-serif text-4xl font-medium text-neutral-900">Featured Work</h2>
+      </div>
+
+      <div class="flex flex-col divide-y divide-neutral-200 max-w-[1200px] mx-auto px-6">
+        {projectRows.map((block) => (
+          <div class="py-8 first:pt-0 last:pb-0">
+            <ProjectRow
+              theme={block.attrs.theme as string}
+              link={block.attrs.link as string}
+              image={block.attrs.image as string}
+              imagePos={block.attrs.imagePos as "left" | "right"}
+              content={block.content || ""}
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  </div> <div class="bg-[#F3F0FA] pt-24 pb-36 relative z-20 w-full min-h-screen flex flex-col justify-center">
     
     <div class="absolute bottom-full left-0 w-full z-20 leading-[0] pointer-events-none translate-y-[2px]">
-      <WaveDivider fill="#ffffff" position="bottom" class="w-full block" />
+      <WaveDivider fill="#F3F0FA" position="bottom" class="w-full block" />
     </div>
 
-    <div class="max-w-[1200px] mx-auto px-6 mb-4">
-      <h2 class="font-serif text-4xl font-medium text-neutral-900">Featured Work</h2>
-    </div>
-    
-    <div class="flex flex-col divide-y divide-neutral-200 max-w-[1200px] mx-auto px-6">
-      {projectRows.map((block) => (
-        <div class="py-8 first:pt-0 last:pb-0">
-          <ProjectRow
-            theme={block.attrs.theme as string}
-            link={block.attrs.link as string}
-            image={block.attrs.image as string}
-            imagePos={block.attrs.imagePos as "left" | "right"}
-            content={block.content || ""}
-          />
-        </div>
-      ))}
-    </div>
-
-    <div class="absolute bottom-0 left-0 w-full z-20 pointer-events-none translate-y-[2px] scale-y-[1.1] origin-bottom">
-      <WaveDivider fill="#F3F0FA" position="bottom" class="w-full" />
-    </div>
-  </div>
-
-  <div class="bg-[#F3F0FA] pt-24 pb-36 relative z-10 overflow-hidden">
-    <div class="max-w-[1200px] mx-auto px-6">
+    <div class="max-w-[1200px] mx-auto px-6 w-full">
       <h2 class="font-serif text-4xl font-medium text-neutral-900 mb-12">About Me</h2>
       {aboutParallax && (
         <div class="flex flex-col md:flex-row gap-12 md:gap-16 items-center">
