@@ -7,7 +7,8 @@ interface Props {
 const { far, front } = Astro.props;
 ---
 
-<div class="relative w-full parallax-container flex justify-center items-center">
+<div class="relative w-fit mx-auto parallax-container flex justify-center items-center overflow-visible">
+  
   {/* FAR LAYER */}
   {far && (
     <div class="absolute inset-0 z-0 layer-far pointer-events-none flex justify-center items-center">
@@ -16,7 +17,7 @@ const { far, front } = Astro.props;
   )}
   
   {/* STATIC CENTER: Your Portrait */}
-  <div class="relative z-10 w-full flex justify-center">
+  <div class="relative z-10 block pointer-events-none">
     <slot />
   </div>
 
@@ -46,20 +47,15 @@ const { far, front } = Astro.props;
 
     /* 🌬️ WIDE ORGANIC TUMBLE ANIMATIONS */
     .organic-drift-far {
-      /* Increased to 35s to keep the larger movement feeling slow and fluid */
       animation: driftFar 35s linear infinite;
       will-change: transform;
     }
 
     .organic-drift-front {
-      /* Increased to 28s */
       animation: driftFront 28s linear infinite;
       will-change: transform;
     }
 
-    /* Massive translation distances applied here. 
-      The shapes will now drift 40px to 60px in every direction while spinning.
-    */
     @keyframes driftFar {
       0%   { transform: translate(0px, -40px) rotate(0deg); }
       25%  { transform: translate(40px, 0px) rotate(90deg); }

@@ -43,7 +43,7 @@ const aboutParallax = blocks.find((b) => b.kind === "about-parallax") as
       </div>
 
       <div class="max-w-[1200px] mx-auto px-6 mb-8 w-full">
-        <h2 class="font-serif text-[clamp(1.75rem,2vw,2rem)] font-normal text-neutral-500 pb-4 border-b border-[#D8D8D8]">
+        <h2 class="font-serif text-[clamp(1.75rem,2vw,2.5rem)] font-normal text-neutral-400 pb-4 border-b border-[#D8D8D8]">
           Featured Work
         </h2>
       </div>
@@ -72,12 +72,29 @@ const aboutParallax = blocks.find((b) => b.kind === "about-parallax") as
         </div>
 
         <div class="max-w-[1200px] mx-auto px-6 w-full">
-          <h2 class="font-serif text-4xl font-medium text-neutral-900 mb-12">About Me</h2>
           {aboutParallax && (
-            <div class="flex flex-col md:flex-row gap-12 md:gap-16 items-start">
-              <div class="md:w-[55%] text-lg leading-relaxed text-neutral-700">
-                <MarkdownContent content={aboutParallax.content || ""} reveal={false} />
+            <div class="flex flex-col md:flex-row gap-12 md:gap-16 items-center">
+              
+              <div class="w-full md:w-[55%] flex flex-col items-start">
+                
+                <div class="w-full mb-5">
+                  <h2 class="font-serif text-[clamp(1.75rem,4vw,2.5rem)] font-normal text-neutral-500 pb-2 border-b border-[#D8D8D8]">
+                    About Me
+                  </h2>
+                </div>
+                
+                <div class="text-xl md:text-[1.25rem] leading-relaxed text-neutral-700">
+                  <MarkdownContent content={aboutParallax.content || ""} reveal={false} />
+                </div>
+                
+                <a 
+                  href="/about" 
+                  class="inline-flex items-center justify-center mt-8 px-6 py-3 border-2 border-[#4B32A8] text-[#4B32A8] font-sans font-semibold text-sm tracking-wide rounded-full bg-transparent hover:bg-[#4B32A8] hover:text-white transition-all duration-300 ease-out transform hover:scale-[1.03] shadow-sm hover:shadow-md"
+                >
+                  More About Me
+                </a>
               </div>
+              
               <div class="md:w-[45%] relative flex justify-center items-center w-full">
                 {aboutParallax.attrs.front || aboutParallax.attrs.far ? (
                   <AboutParallax
@@ -90,6 +107,7 @@ const aboutParallax = blocks.find((b) => b.kind === "about-parallax") as
                   <img src="/assets/home/home-hero-portrait.webp" class="w-full max-w-[380px] h-auto rounded-2xl border border-neutral-200/60 shadow-sm object-contain bg-white p-2" alt="Liam Portrait" />
                 )}
               </div>
+              
             </div>
           )}
         </div>
@@ -97,7 +115,6 @@ const aboutParallax = blocks.find((b) => b.kind === "about-parallax") as
         <div class="absolute top-full left-0 w-full h-[50vh] bg-[#F3F0FA] pointer-events-none"></div>
         
       </div>
-    </div>
     </div> 
 
   </div> 
@@ -106,7 +123,6 @@ const aboutParallax = blocks.find((b) => b.kind === "about-parallax") as
 <script>
   // ==========================================
   // 1. DYNAMIC STICKY HEIGHT LOCK
-  // Now computes the lock for BOTH Projects and About Me
   // ==========================================
   const projectsCard = document.getElementById("projects-layer");
   const aboutCard = document.getElementById("about-layer");
@@ -122,7 +138,6 @@ const aboutParallax = blocks.find((b) => b.kind === "about-parallax") as
   };
 
   updateSticky();
-  // Using document.body ensures we catch image loads in both sections
   new ResizeObserver(updateSticky).observe(document.body);
   window.addEventListener('resize', updateSticky, { passive: true });
 
@@ -132,16 +147,13 @@ const aboutParallax = blocks.find((b) => b.kind === "about-parallax") as
   const heroCard = document.getElementById("hero-layer");
   const footer = document.querySelector("[data-footer]") || document.querySelector("footer"); 
 
-  // ⚙️ YOUR SPEED DIALS 
-  // PROJECTS_SPEED is now significantly amped up compared to the HERO_SPEED
   const HERO_SPEED = 0.35; 
-  const PROJECTS_SPEED = 0.50; // Amped up! (Was 0.15)
-  const ABOUT_SPEED = 0.20;    // Speed for when the footer slides over
+  const PROJECTS_SPEED = 0.50; 
+  const ABOUT_SPEED = 0.20;    
 
   const parallaxTick = () => {
     const vh = window.innerHeight;
 
-    // A. Drift the Hero up as the Projects slide over it
     if (heroCard && projectsCard) {
       const projectsTop = projectsCard.getBoundingClientRect().top;
       if (projectsTop <= vh && projectsTop >= 0) {
@@ -152,7 +164,6 @@ const aboutParallax = blocks.find((b) => b.kind === "about-parallax") as
       }
     }
 
-    // B. Drift the Projects up as the About Me slides over it
     if (projectsCard && aboutCard) {
       const aboutTop = aboutCard.getBoundingClientRect().top;
       if (aboutTop <= vh && aboutTop >= 0) {
@@ -163,7 +174,6 @@ const aboutParallax = blocks.find((b) => b.kind === "about-parallax") as
       }
     }
 
-    // C. Drift the About Me section up as the Footer slides over it
     if (aboutCard && footer) {
       const footerTop = footer.getBoundingClientRect().top;
       if (footerTop <= vh && footerTop >= 0) {
