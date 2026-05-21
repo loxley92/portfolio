@@ -23,7 +23,7 @@ const aboutParallax = blocks.find((b) => b.kind === "about-parallax") as
 
 <BaseLayout title="Liam Oxley — Portfolio">
   
-  <div class="sticky top-0 z-0 w-full bg-[linear-gradient(to_bottom,#F9DABF,#FFC297)] overflow-hidden">
+  <div id="hero-layer" class="sticky top-0 z-0 w-full min-h-screen bg-[linear-gradient(to_bottom,#F9DABF,#FFC297)] overflow-hidden will-change-transform">
     <HomeHero
       title={frontmatter.title as string}
       description={frontmatter.description as string}
@@ -35,15 +35,17 @@ const aboutParallax = blocks.find((b) => b.kind === "about-parallax") as
   <div class="relative z-10 w-full">
     
     <div 
-      id="tall-projects-card" 
-      class="sticky z-10 w-full bg-white pb-16 pt-16 text-neutral-900"
+      id="projects-layer" 
+      class="sticky z-10 w-full bg-white pb-16 pt-16 text-neutral-900 will-change-transform"
     >
       <div class="absolute bottom-full left-0 w-full z-20 leading-[0] pointer-events-none translate-y-[2px]">
         <WaveDivider fill="#ffffff" position="bottom" class="w-full block" />
       </div>
 
-      <div class="max-w-[1200px] mx-auto px-6 mb-4">
-        <h2 class="font-serif text-4xl font-medium text-neutral-900">Featured Work</h2>
+      <div class="max-w-[1200px] mx-auto px-6 mb-8 w-full">
+        <h2 class="font-serif text-[clamp(1.75rem,2vw,2rem)] font-normal text-neutral-500 pb-4 border-b border-[#D8D8D8]">
+          Featured Work
+        </h2>
       </div>
 
       <div class="flex flex-col divide-y divide-neutral-200 max-w-[1200px] mx-auto px-6">
@@ -61,53 +63,119 @@ const aboutParallax = blocks.find((b) => b.kind === "about-parallax") as
       </div>
     </div> 
 
-    <div class="relative z-20 w-full bg-[#F3F0FA] pt-24 pb-36 min-h-screen">
+    <div id="about-layer" class="sticky z-20 w-full">
       
-      <div class="absolute bottom-full left-0 w-full z-20 leading-[0] pointer-events-none translate-y-[2px]">
-        <WaveDivider fill="#F3F0FA" position="bottom" class="w-full block" />
-      </div>
+      <div id="about-inner" class="w-full bg-[#F3F0FA] pt-24 pb-36 min-h-screen relative will-change-transform">
+        
+        <div class="absolute bottom-full left-0 w-full z-20 leading-[0] pointer-events-none translate-y-[2px]">
+          <WaveDivider fill="#F3F0FA" position="bottom" class="w-full block" />
+        </div>
 
-      <div class="max-w-[1200px] mx-auto px-6 w-full">
-        <h2 class="font-serif text-4xl font-medium text-neutral-900 mb-12">About Me</h2>
-        {aboutParallax && (
-          <div class="flex flex-col md:flex-row gap-12 md:gap-16 items-start">
-            <div class="md:w-[55%] text-lg leading-relaxed text-neutral-700">
-              <MarkdownContent content={aboutParallax.content || ""} reveal={false} />
+        <div class="max-w-[1200px] mx-auto px-6 w-full">
+          <h2 class="font-serif text-4xl font-medium text-neutral-900 mb-12">About Me</h2>
+          {aboutParallax && (
+            <div class="flex flex-col md:flex-row gap-12 md:gap-16 items-start">
+              <div class="md:w-[55%] text-lg leading-relaxed text-neutral-700">
+                <MarkdownContent content={aboutParallax.content || ""} reveal={false} />
+              </div>
+              <div class="md:w-[45%] relative flex justify-center items-center w-full">
+                {aboutParallax.attrs.front || aboutParallax.attrs.far ? (
+                  <AboutParallax
+                    far={aboutParallax.attrs.far ? fixPath(aboutParallax.attrs.far as string) : undefined}
+                    front={aboutParallax.attrs.front ? fixPath(aboutParallax.attrs.front as string) : undefined}
+                  >
+                    <img src="/assets/home/home-hero-portrait.webp" class="relative z-10 w-full max-w-[300px] sm:max-w-[340px] md:max-w-[380px] h-auto object-contain" alt="Liam Portrait" />
+                  </AboutParallax>
+                ) : (
+                  <img src="/assets/home/home-hero-portrait.webp" class="w-full max-w-[380px] h-auto rounded-2xl border border-neutral-200/60 shadow-sm object-contain bg-white p-2" alt="Liam Portrait" />
+                )}
+              </div>
             </div>
-            <div class="md:w-[45%] relative flex justify-center items-center w-full">
-              {aboutParallax.attrs.front || aboutParallax.attrs.far ? (
-                <AboutParallax
-                  far={aboutParallax.attrs.far ? fixPath(aboutParallax.attrs.far as string) : undefined}
-                  front={aboutParallax.attrs.front ? fixPath(aboutParallax.attrs.front as string) : undefined}
-                >
-                  <img src="/assets/home/home-hero-portrait.webp" class="relative z-10 w-full max-w-[300px] sm:max-w-[340px] md:max-w-[380px] h-auto object-contain" alt="Liam Portrait" />
-                </AboutParallax>
-              ) : (
-                <img src="/assets/home/home-hero-portrait.webp" class="w-full max-w-[380px] h-auto rounded-2xl border border-neutral-200/60 shadow-sm object-contain bg-white p-2" alt="Liam Portrait" />
-              )}
-            </div>
-          </div>
-        )}
+          )}
+        </div>
+
+        <div class="absolute top-full left-0 w-full h-[50vh] bg-[#F3F0FA] pointer-events-none"></div>
+        
       </div>
+    </div>
     </div> 
 
   </div> 
 </BaseLayout>
 
 <script>
-  // 💡 JANK-FREE FIX: Uses true window.innerHeight for butter-smooth mobile/desktop locking
-  const projectsCard = document.getElementById("tall-projects-card");
+  // ==========================================
+  // 1. DYNAMIC STICKY HEIGHT LOCK
+  // Now computes the lock for BOTH Projects and About Me
+  // ==========================================
+  const projectsCard = document.getElementById("projects-layer");
+  const aboutCard = document.getElementById("about-layer");
   
-  if (projectsCard) {
-    const updateSticky = () => {
-      const vh = window.innerHeight;
-      const h = projectsCard.offsetHeight;
-      projectsCard.style.top = `${vh - h}px`;
-    };
+  const updateSticky = () => {
+    const vh = window.innerHeight;
+    if (projectsCard) {
+      projectsCard.style.top = `${vh - projectsCard.offsetHeight}px`;
+    }
+    if (aboutCard) {
+      aboutCard.style.top = `${vh - aboutCard.offsetHeight}px`;
+    }
+  };
 
-    // Calculate immediately, and dynamically monitor for layout changes
-    updateSticky();
-    new ResizeObserver(updateSticky).observe(projectsCard);
-    window.addEventListener('resize', updateSticky, { passive: true });
-  }
+  updateSticky();
+  // Using document.body ensures we catch image loads in both sections
+  new ResizeObserver(updateSticky).observe(document.body);
+  window.addEventListener('resize', updateSticky, { passive: true });
+
+  // ==========================================
+  // 2. THE PARALLAX DRIFT ENGINE
+  // ==========================================
+  const heroCard = document.getElementById("hero-layer");
+  const footer = document.querySelector("[data-footer]") || document.querySelector("footer"); 
+
+  // ⚙️ YOUR SPEED DIALS 
+  // PROJECTS_SPEED is now significantly amped up compared to the HERO_SPEED
+  const HERO_SPEED = 0.35; 
+  const PROJECTS_SPEED = 0.50; // Amped up! (Was 0.15)
+  const ABOUT_SPEED = 0.20;    // Speed for when the footer slides over
+
+  const parallaxTick = () => {
+    const vh = window.innerHeight;
+
+    // A. Drift the Hero up as the Projects slide over it
+    if (heroCard && projectsCard) {
+      const projectsTop = projectsCard.getBoundingClientRect().top;
+      if (projectsTop <= vh && projectsTop >= 0) {
+        const overlap = vh - projectsTop;
+        heroCard.style.transform = `translateY(${overlap * -HERO_SPEED}px)`;
+      } else if (projectsTop > vh) {
+        heroCard.style.transform = `translateY(0px)`;
+      }
+    }
+
+    // B. Drift the Projects up as the About Me slides over it
+    if (projectsCard && aboutCard) {
+      const aboutTop = aboutCard.getBoundingClientRect().top;
+      if (aboutTop <= vh && aboutTop >= 0) {
+        const overlap = vh - aboutTop;
+        projectsCard.style.transform = `translateY(${overlap * -PROJECTS_SPEED}px)`;
+      } else if (aboutTop > vh) {
+        projectsCard.style.transform = `translateY(0px)`;
+      }
+    }
+
+    // C. Drift the About Me section up as the Footer slides over it
+    if (aboutCard && footer) {
+      const footerTop = footer.getBoundingClientRect().top;
+      if (footerTop <= vh && footerTop >= 0) {
+        const overlap = vh - footerTop;
+        aboutCard.style.transform = `translateY(${overlap * -ABOUT_SPEED}px)`;
+      } else if (footerTop > vh) {
+        aboutCard.style.transform = `translateY(0px)`;
+      }
+    }
+
+    requestAnimationFrame(parallaxTick);
+  };
+
+  requestAnimationFrame(parallaxTick);
 </script>

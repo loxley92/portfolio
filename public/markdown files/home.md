@@ -10,7 +10,7 @@ imageAlt: "Animated line art illustration of Liam collaborating with a client at
 { section="featured-work", zIndex=20 }
 { type="wave-divider" }
 
-{ type="project-row", imagePos="right", theme="#F3E8FF", link="/work/navigation", image="/assets/navigation/hero.png" }
+{ type="project-row", imagePos="right", theme="#F3E8FF", link="/work/navigation", image="/assets/navigation/hero.webp" }
 #### IA • Cognitive Load • Scalable System
 ### Restructuring Core Navigation
 Reducing cognitive load by transitioning from nested menus to a scalable hub framework.
@@ -26,7 +26,7 @@ Elevating player engagement and revenue in Rival Stars Horse Racing through stra
 * Increased Seasonal Retention
 * Aligned UI with User Motivation
 
-{ type="project-row", imagePos="right", theme="#FEF9C3", link="/work/localisation", image="/assets/projects/localisation/hero.png" }
+{ type="project-row", imagePos="right", theme="#FEF9C3", link="/work/localisation", image="/assets/localisation/hero.webp" }
 #### Process Optimization • Internal Tooling • Automation
 ### Localization Process Improvement
 Creating scalable solutions for translation management and cross-discipline workflows.

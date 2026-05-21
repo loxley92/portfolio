@@ -2,9 +2,56 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 ---
 
-<BaseLayout title="About — Liam Oxley">
-  <section class="px-6 py-20 max-w-3xl mx-auto">
-    <h1 class="text-4xl font-semibold tracking-tight">About</h1>
-    <p class="mt-4 text-neutral-600">Placeholder — content to come.</p>
-  </section>
-</BaseLayout>
+<div id="about-layer" class="sticky z-20 w-full">
+      
+      <div id="about-inner" class="w-full bg-[#F3F0FA] pt-24 pb-36 min-h-screen relative will-change-transform">
+        
+        <div class="absolute bottom-full left-0 w-full z-20 leading-[0] pointer-events-none translate-y-[2px]">
+          <WaveDivider fill="#F3F0FA" position="bottom" class="w-full block" />
+        </div>
+
+        <div class="max-w-[1200px] mx-auto px-6 w-full">
+          <div class="flex flex-col md:flex-row gap-12 md:gap-16 items-start">
+            
+            <div class="w-full md:w-[55%] flex flex-col items-start">
+              
+              <div class="w-full mb-8">
+                <h2 class="font-serif text-[clamp(1.75rem,4vw,2.5rem)] font-normal text-neutral-500 pb-4 border-b border-[#D8D8D8]">
+                  About Me
+                </h2>
+              </div>
+
+              <div class="text-lg leading-relaxed text-neutral-700">
+                {aboutParallax && (
+                  <MarkdownContent content={aboutParallax.content || ""} reveal={false} />
+                )}
+              </div>
+
+              <a 
+                href="/about" 
+                class="inline-flex items-center justify-center mt-8 px-6 py-3 border-2 border-[#4B32A8] text-[#4B32A8] font-sans font-semibold text-sm tracking-wide rounded-full bg-transparent hover:bg-[#4B32A8] hover:text-white transition-all duration-300 ease-out transform hover:scale-[1.03] shadow-sm hover:shadow-md"
+              >
+                More About Me
+              </a>
+            </div>
+
+            <div class="md:w-[45%] relative flex justify-center items-center w-full">
+              {aboutParallax && (aboutParallax.attrs.front || aboutParallax.attrs.far) ? (
+                <AboutParallax
+                  far={aboutParallax.attrs.far ? fixPath(aboutParallax.attrs.far as string) : undefined}
+                  front={aboutParallax.attrs.front ? fixPath(aboutParallax.attrs.front as string) : undefined}
+                >
+                  <img src="/assets/home/home-hero-portrait.webp" class="relative z-10 w-full max-w-[300px] sm:max-w-[340px] md:max-w-[380px] h-auto object-contain" alt="Liam Portrait" />
+                </AboutParallax>
+              ) : (
+                <img src="/assets/home/home-hero-portrait.webp" class="w-full max-w-[380px] h-auto rounded-2xl border border-neutral-200/60 shadow-sm object-contain bg-white p-2" alt="Liam Portrait" />
+              )}
+            </div>
+
+          </div>
+        </div>
+
+        <div class="absolute top-full left-0 w-full h-[50vh] bg-[#F3F0FA] pointer-events-none"></div>
+        
+      </div>
+    </div>

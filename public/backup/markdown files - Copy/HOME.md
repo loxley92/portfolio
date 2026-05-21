@@ -8,7 +8,7 @@ heroImage: "/assets/home/hero-sketch.png"
 { section="featured-work", zIndex=20 }
   { type="wave-divider" }
   
-  ## Featured Work
+  ### Featured Work
   { type="section-label" }
 
   { type="project-row", imagePos="right", theme="#F3E8FF", link="/work/navigation", image="/assets/home/thumb-navigation.png" }
