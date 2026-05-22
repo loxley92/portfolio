@@ -23,7 +23,7 @@ const aboutParallax = blocks.find((b) => b.kind === "about-parallax") as
 
 <BaseLayout title="Liam Oxley — Portfolio">
   
-  <div id="hero-layer" class="sticky top-0 z-0 w-full min-h-screen bg-[linear-gradient(to_bottom,#F9DABF,#FFC297)] overflow-hidden will-change-transform">
+<div id="hero-layer" class="sticky top-0 z-0 w-full bg-[linear-gradient(to_bottom,#F9DABF,#FFC297)] overflow-hidden will-change-transform pb-[50vh] -mb-[50vh]">
     <HomeHero
       title={frontmatter.title as string}
       description={frontmatter.description as string}
@@ -65,7 +65,7 @@ const aboutParallax = blocks.find((b) => b.kind === "about-parallax") as
 
     <div id="about-layer" class="sticky z-20 w-full">
       
-      <div id="about-inner" class="w-full bg-[#F3F0FA] pt-24 pb-36 min-h-screen relative will-change-transform">
+      <div id="about-inner" class="w-full bg-[#F3F0FA] pt-30 pb-45 relative will-change-transform">
         
         <div class="absolute bottom-full left-0 w-full z-20 leading-[0] pointer-events-none translate-y-[2px]">
           <WaveDivider fill="#F3F0FA" position="bottom" class="w-full block" />
