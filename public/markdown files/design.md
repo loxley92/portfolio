@@ -1,7 +1,7 @@
 # Portfolio Design System: Liam Oxley Designs (Master V3.0)
 
 ## 1. Color System & Themes
-- **Hero Gradient**: linear-gradient(to bottom, #F9DABF, #FFC297)
+- **Hero Gradient**: linear-gradient(to bottom, #ffecdb, #6b3712)
 - **Primary Page BG**: #F9F9F9
 - **Primary Purple**: #4B32A8 (Selection/Action Color)
 - **Divider Color**: #D8D8D8 (H2 Underlines)

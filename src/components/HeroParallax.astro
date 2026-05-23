@@ -1,0 +1,140 @@
+---
+---
+
+<div class="relative w-full parallax-container overflow-visible">
+  
+  {/* FAR LAYER (Z-0) */}
+  {/* Added -translate-y-16 to pull the whole layer up */}
+  <div class="absolute inset-0 z-0 pointer-events-none -translate-y-16">
+    <slot name="far" />
+  </div>
+
+  {/* MID LAYER (Z-10) */}
+  {/* Added -translate-y-16 to pull the whole layer up */}
+  <div class="absolute inset-0 z-10 pointer-events-none -translate-y-16">
+    <slot name="mid" />
+  </div>
+
+  {/* FRONT LAYER (Z-15) */}
+  {/* Added -translate-y-16 to pull the whole layer up */}
+  <div class="absolute inset-0 z-15 pointer-events-none -translate-y-16">
+    <slot name="front" />
+  </div>
+  
+  {/* STATIC CENTER (Z-20) - Content stays exactly where it is! */}
+  <div class="relative z-20 block">
+    <slot />
+  </div>
+
+</div>
+
+<style>
+  @media (hover: hover) and (pointer: fine) {
+    /* 🌬️ WIDE ORGANIC TUMBLE ANIMATIONS */
+    :global(.organic-drift-far) { animation: driftFar 35s linear infinite; will-change: transform; }
+    :global(.organic-drift-mid) { animation: driftFar 25s linear infinite reverse; will-change: transform; }
+    :global(.organic-drift-front) { animation: driftFront 20s linear infinite; will-change: transform; }
+
+    @keyframes driftFar {
+      0%   { transform: translateY(-20px) rotate(0deg); }
+      25%  { transform: translateY(0px) rotate(90deg); }
+      50%  { transform: translateY(20px) rotate(180deg); }
+      75%  { transform: translateY(0px) rotate(270deg); }
+      100% { transform: translateY(-20px) rotate(360deg); }
+    }
+
+    @keyframes driftFront {
+      0%   { transform: translateY(40px) rotate(0deg); }
+      25%  { transform: translateY(0px) rotate(-90deg); }
+      50%  { transform: translateY(-40px) rotate(-180deg); }
+      75%  { transform: translateY(0px) rotate(-270deg); }
+      100% { transform: translateY(40px) rotate(-360deg); }
+    }
+  }
+</style>
+
+<script>
+  if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+    const container = document.querySelector(".parallax-container") as HTMLElement;
+
+    // Grab ONLY the floating shapes, ignoring your profile image
+    const shapes = Array.from(container.querySelectorAll<HTMLImageElement>('img[class*="organic-drift"]')).map((el) => {
+      
+      // Determine scroll depth multiplier based on the layer
+      let scrollSpeed = 0;
+      if (el.classList.contains('organic-drift-far')) scrollSpeed = 0.4;     // Moves down (stays on screen longer)
+      if (el.classList.contains('organic-drift-mid')) scrollSpeed = 0.15;    // Moves down slightly
+      if (el.classList.contains('organic-drift-front')) scrollSpeed = -0.3;  // Moves up (exits screen faster)
+
+      return {
+        el,
+        repelX: 0,
+        repelY: 0,
+        parallaxX: (Math.random() * 1.5 + 0.5) * (Math.random() > 0.5 ? 1 : -1),
+        parallaxY: (Math.random() * 1.5 + 0.5) * (Math.random() > 0.5 ? 1 : -1),
+        scrollSpeed
+      };
+    });
+
+    let targetMx = 0; let targetMy = 0;
+    let currentMx = 0; let currentMy = 0;
+    let mouseX = -1000; let mouseY = -1000;
+    
+    // Track scroll position for Deep Parallax
+    let scrollY = window.scrollY;
+    window.addEventListener("scroll", () => {
+      scrollY = window.scrollY;
+    });
+
+    const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
+
+    window.addEventListener("mousemove", (e) => {
+      targetMx = (e.clientX / window.innerWidth) * 2 - 1;
+      targetMy = (e.clientY / window.innerHeight) * 2 - 1;
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    });
+
+    const tick = () => {
+      currentMx = lerp(currentMx, targetMx, 0.04);
+      currentMy = lerp(currentMy, targetMy, 0.04);
+
+      shapes.forEach(shape => {
+        // 1. Base Mouse Parallax
+        const pX = currentMx * 30 * shape.parallaxX;
+        const pY = currentMy * 30 * shape.parallaxY;
+
+        // 2. Cinematic Scroll Parallax
+        const scrollOffset = scrollY * shape.scrollSpeed;
+
+        // 3. Magnetic Repel Logic
+        const rect = shape.el.getBoundingClientRect();
+        const shapeCenterX = rect.left + rect.width / 2;
+        const shapeCenterY = rect.top + rect.height / 2;
+        
+        const dx = shapeCenterX - mouseX;
+        const dy = shapeCenterY - mouseY;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+
+        let rX = 0; let rY = 0;
+        const repelRadius = 250; 
+        
+        if (distance < repelRadius) {
+          const force = (repelRadius - distance) / repelRadius; 
+          rX = (dx / distance) * force * 70; 
+          rY = (dy / distance) * force * 70;
+        }
+
+        shape.repelX = lerp(shape.repelX, rX, 0.1);
+        shape.repelY = lerp(shape.repelY, rY, 0.1);
+
+        // Combine everything cleanly using CSS translate
+        shape.el.style.translate = `${pX + shape.repelX}px ${pY + shape.repelY + scrollOffset}px`;
+      });
+
+      requestAnimationFrame(tick);
+    };
+
+    requestAnimationFrame(tick);
+  }
+</script>

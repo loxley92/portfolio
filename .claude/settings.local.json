@@ -35,7 +35,12 @@
       "Bash(curl -s -o /tmp/eng-new.html -w \"%{http_code} %{size_download}b\\\\n\" http://localhost:4323/work/engagement)",
       "Bash(curl -s -o /dev/null -w \"  %{http_code}\\\\n\" \"http://localhost:4323/src/components/Reveal.astro\")",
       "Bash(awk '/stepper-success/{p=1; next} p && /^[[:space:]]*\\\\{[[:space:]]*section=/{exit} p{print NR\": \"$0}' \"C:/Users/loxle/Desktop/portfolio/public/markdown files/engagement.MD\")",
-      "Bash(node *)"
+      "Bash(node *)",
+      "Bash(Select-String -Path \"dist\\\\about\\\\index.html\" -Pattern \"timeline-node|People First|Be Adaptable|Be Curious\")",
+      "Bash(Select-Object -First 10)",
+      "Bash(python3 -c ' *)",
+      "Bash(curl -s http://localhost:4322/about/)",
+      "Bash(kill %1)"
     ]
   }
 }
