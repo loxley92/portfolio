@@ -59,9 +59,10 @@
     containers.forEach(container => {
       const shapes = Array.from(container.querySelectorAll<HTMLImageElement>('img[class*="organic-drift"]')).map((el) => {
         let scrollSpeed = 0;
-        if (el.classList.contains('organic-drift-far')) scrollSpeed = 0.4;
-        if (el.classList.contains('organic-drift-mid')) scrollSpeed = 0.15;
-        if (el.classList.contains('organic-drift-front')) scrollSpeed = -0.3;
+        // Adjusted multipliers for tighter control around target assets
+        if (el.classList.contains('organic-drift-far')) scrollSpeed = 0.25;
+        if (el.classList.contains('organic-drift-mid')) scrollSpeed = 0.12;
+        if (el.classList.contains('organic-drift-front')) scrollSpeed = -0.18;
 
         return {
           el,
@@ -77,10 +78,6 @@
       let targetMx = 0; let targetMy = 0;
       let currentMx = 0; let currentMy = 0;
       let mouseX = -1000; let mouseY = -1000;
-      let scrollY = window.scrollY;
-
-      const handleScroll = () => { scrollY = window.scrollY; };
-      window.addEventListener("scroll", handleScroll, { passive: true });
 
       const handleMouseMove = (e: MouseEvent) => {
         targetMx = (e.clientX / window.innerWidth) * 2 - 1;
@@ -94,7 +91,6 @@
 
       const tick = () => {
         if (!container.isConnected) {
-          window.removeEventListener("scroll", handleScroll);
           window.removeEventListener("mousemove", handleMouseMove);
           return;
         }
@@ -102,14 +98,22 @@
         currentMx = lerp(currentMx, targetMx, 0.04);
         currentMy = lerp(currentMy, targetMy, 0.04);
 
+        // Calculate scroll offset based on screen viewport position
+        const rect = container.getBoundingClientRect();
+        const viewportCenter = window.innerHeight / 2;
+        const containerCenter = rect.top + rect.height / 2;
+        const distanceFromCenter = containerCenter - viewportCenter;
+
         shapes.forEach(shape => {
           const pX = currentMx * 30 * shape.parallaxX;
           const pY = currentMy * 30 * shape.parallaxY;
-          const scrollOffset = scrollY * shape.scrollSpeed;
 
-          const rect = shape.el.getBoundingClientRect();
-          const shapeCenterX = rect.left + rect.width / 2;
-          const shapeCenterY = rect.top + rect.height / 2;
+          // Displacement is now relative to the live container center point
+          const scrollOffset = distanceFromCenter * shape.scrollSpeed;
+
+          const shapeRect = shape.el.getBoundingClientRect();
+          const shapeCenterX = shapeRect.left + shapeRect.width / 2;
+          const shapeCenterY = shapeRect.top + shapeRect.height / 2;
 
           const dx = shapeCenterX - mouseX;
           const dy = shapeCenterY - mouseY;
