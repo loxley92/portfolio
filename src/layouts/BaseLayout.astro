@@ -29,7 +29,7 @@ const { title, description = "Portfolio of Liam Oxley" } = Astro.props;
     <title>{title}</title>
     <ViewTransitions />
   </head>
-  <body class="bg-page text-neutral-900">
+  <body class="bg-page text-neutral-900 overflow-x-clip">
     <Header />
     <main>
       <slot />

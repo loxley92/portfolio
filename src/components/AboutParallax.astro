@@ -7,7 +7,7 @@ interface Props {
 const { far, front } = Astro.props;
 ---
 
-<div class="relative w-fit mx-auto parallax-container flex justify-center items-center overflow-x-clip">
+<div class="relative w-fit mx-auto parallax-container flex justify-center items-center overflow-visible">
   
   {/* FAR LAYER */}
   {far && (
@@ -75,32 +75,92 @@ const { far, front } = Astro.props;
 </style>
 
 <script>
-  if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
-    const container = document.querySelector(".parallax-container") as HTMLElement;
+  function initParallaxEngine() {
+    if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
 
-    let targetX = 0;
-    let targetY = 0;
-    let currentX = 0;
-    let currentY = 0;
+    const containers = document.querySelectorAll<HTMLElement>(".parallax-container");
 
-    const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
+    containers.forEach(container => {
+      const shapes = Array.from(container.querySelectorAll<HTMLImageElement>('img[class*="organic-drift"]')).map((el) => {
+        let scrollSpeed = 0;
+        if (el.classList.contains('organic-drift-far')) scrollSpeed = 0.4;
+        if (el.classList.contains('organic-drift-mid')) scrollSpeed = 0.15;
+        if (el.classList.contains('organic-drift-front')) scrollSpeed = -0.3;
 
-    window.addEventListener("mousemove", (e) => {
-      targetX = (e.clientX / window.innerWidth) * 2 - 1;
-      targetY = (e.clientY / window.innerHeight) * 2 - 1;
-    });
+        return {
+          el,
+          repelX: 0, repelY: 0,
+          parallaxX: (Math.random() * 1.5 + 0.5) * (Math.random() > 0.5 ? 1 : -1),
+          parallaxY: (Math.random() * 1.5 + 0.5) * (Math.random() > 0.5 ? 1 : -1),
+          scrollSpeed
+        };
+      });
 
-    const tick = () => {
-      currentX = lerp(currentX, targetX, 0.04);
-      currentY = lerp(currentY, targetY, 0.04);
-      
-      if (container) {
-        container.style.setProperty("--mouse-x", currentX.toString());
-        container.style.setProperty("--mouse-y", currentY.toString());
-      }
+      if (shapes.length === 0) return;
+
+      let targetMx = 0; let targetMy = 0;
+      let currentMx = 0; let currentMy = 0;
+      let mouseX = -1000; let mouseY = -1000;
+      let scrollY = window.scrollY;
+
+      const handleScroll = () => { scrollY = window.scrollY; };
+      window.addEventListener("scroll", handleScroll, { passive: true });
+
+      const handleMouseMove = (e: MouseEvent) => {
+        targetMx = (e.clientX / window.innerWidth) * 2 - 1;
+        targetMy = (e.clientY / window.innerHeight) * 2 - 1;
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+      };
+      window.addEventListener("mousemove", handleMouseMove);
+
+      const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
+
+      const tick = () => {
+        if (!container.isConnected) {
+          window.removeEventListener("scroll", handleScroll);
+          window.removeEventListener("mousemove", handleMouseMove);
+          return;
+        }
+
+        currentMx = lerp(currentMx, targetMx, 0.04);
+        currentMy = lerp(currentMy, targetMy, 0.04);
+
+        shapes.forEach(shape => {
+          const pX = currentMx * 30 * shape.parallaxX;
+          const pY = currentMy * 30 * shape.parallaxY;
+          const scrollOffset = scrollY * shape.scrollSpeed;
+
+          const rect = shape.el.getBoundingClientRect();
+          const shapeCenterX = rect.left + rect.width / 2;
+          const shapeCenterY = rect.top + rect.height / 2;
+
+          const dx = shapeCenterX - mouseX;
+          const dy = shapeCenterY - mouseY;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+
+          let rX = 0; let rY = 0;
+          const repelRadius = 250;
+
+          if (distance < repelRadius) {
+            const force = (repelRadius - distance) / repelRadius;
+            rX = (dx / distance) * force * 70;
+            rY = (dy / distance) * force * 70;
+          }
+
+          shape.repelX = lerp(shape.repelX, rX, 0.1);
+          shape.repelY = lerp(shape.repelY, rY, 0.1);
+
+          shape.el.style.translate = `${pX + shape.repelX}px ${pY + shape.repelY + scrollOffset}px`;
+        });
+
+        requestAnimationFrame(tick);
+      };
+
       requestAnimationFrame(tick);
-    };
-
-    requestAnimationFrame(tick);
+    });
   }
+
+  initParallaxEngine();
+  document.addEventListener("astro:page-load", initParallaxEngine);
 </script>
