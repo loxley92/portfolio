@@ -4,20 +4,17 @@
 <div class="relative w-full parallax-container overflow-visible">
   
   {/* FAR LAYER (Z-0) */}
-  {/* Added -translate-y-16 to pull the whole layer up */}
-  <div class="absolute inset-0 z-0 pointer-events-none -translate-y-16">
+  <div class="absolute inset-0 z-0 pointer-events-none">
     <slot name="far" />
   </div>
 
   {/* MID LAYER (Z-10) */}
-  {/* Added -translate-y-16 to pull the whole layer up */}
-  <div class="absolute inset-0 z-10 pointer-events-none -translate-y-16">
+  <div class="absolute inset-0 z-10 pointer-events-none">
     <slot name="mid" />
   </div>
 
   {/* FRONT LAYER (Z-15) */}
-  {/* Added -translate-y-16 to pull the whole layer up */}
-  <div class="absolute inset-0 z-15 pointer-events-none -translate-y-16">
+  <div class="absolute inset-0 z-15 pointer-events-none">
     <slot name="front" />
   </div>
   
