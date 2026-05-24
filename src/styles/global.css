@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+html {
+  scroll-behavior: auto !important;
+}
+
 @theme {
   /* Colors — from design.md §1 */
   --color-page: #f9f9f9;

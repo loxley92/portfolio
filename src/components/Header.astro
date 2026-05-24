@@ -8,16 +8,16 @@ const isHome = pathname === "/" || pathname === "/index.html";
 ---
 
 <header
-  class={isHome 
-    ? "absolute top-0 left-0 right-0 z-50 w-full px-4 sm:px-6 md:px-12 py-4 sm:py-8 flex items-center justify-between bg-transparent"
-    : "fixed top-0 left-0 right-0 z-50 w-full px-4 sm:px-6 md:px-12 py-4 sm:py-8 flex items-center justify-between transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] bg-transparent"}
+  class={isHome
+    ? "absolute top-0 left-0 right-0 z-50 w-full px-4 sm:px-6 md:px-12 py-4 sm:py-8 flex items-center justify-between bg-transparent pointer-events-none"
+    : "fixed top-0 left-0 right-0 z-50 w-full px-4 sm:px-6 md:px-12 py-4 sm:py-8 flex items-center justify-between transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] bg-transparent pointer-events-none"}
   data-header={!isHome ? "" : undefined}
 >
-  <a href="/" class="transition-transform hover:scale-105 active:scale-95" aria-label={site.name}>
+  <a href="/" class="pointer-events-auto transition-transform hover:scale-105 active:scale-95" aria-label={site.name}>
     <img src="/assets/global/logo.svg" alt={site.name} class="h-9 w-auto" />
   </a>
 
-  <nav class="flex items-center">
+  <nav class="pointer-events-auto flex items-center">
     <div class="flex gap-2 p-1.5 rounded-full border-2 border-purple/30 bg-purple/5 backdrop-blur-md shadow-sm">
       {navLinks.map((link) => (
         <a 
@@ -32,82 +32,83 @@ const isHome = pathname === "/" || pathname === "/index.html";
 </header>
 
 <script>
-  let lastScroll = window.scrollY;
-  let ticking = false;
-  let isHidden = false;
-  
-  const header = document.querySelector<HTMLElement>("[data-header]"); 
-  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function initHeaderEngine() {
+    let lastScroll = window.scrollY;
+    let ticking = false;
+    let isHidden = false;
+    const header = document.querySelector<HTMLElement>("[data-header]");
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  const glassClasses = ["bg-page/70", "backdrop-blur-md", "border-b", "border-white/40"];
-  const solidClasses = ["border-transparent", "bg-transparent"]; 
+    const glassClasses = ["bg-page/70", "backdrop-blur-md", "border-b", "border-white/40"];
+    const solidClasses = ["border-transparent", "bg-transparent"];
 
-  function update() {
-    // 💡 If on the home page, the data-header attribute is gone, so this cleanly exits!
-    if (!header) return; 
-    
-    const currentScroll = window.scrollY;
+    function update() {
+      if (!header) return;
+      const currentScroll = window.scrollY;
 
-    if (currentScroll > 50) {
-      header.classList.remove(...solidClasses);
-      header.classList.add(...glassClasses);
-    } else {
-      header.classList.remove(...glassClasses);
-      header.classList.add(...solidClasses);
-    }
+      if ((window as any).__isJumping) {
+        header.classList.add("-translate-y-full");
+        document.documentElement.style.setProperty("--header-offset", "0px");
+        lastScroll = currentScroll;
+        return;
+      }
 
-    const delta = currentScroll - lastScroll;
+      if (currentScroll > 50) {
+        header.classList.remove(...solidClasses);
+        header.classList.add(...glassClasses);
+      } else {
+        header.classList.remove(...glassClasses);
+        header.classList.add(...solidClasses);
+      }
 
-    if ((window as any).__isJumping) {
-      isHidden = true; 
-    } else {
+      const delta = currentScroll - lastScroll;
+
       if (currentScroll <= 50) {
-        isHidden = false; 
-      } 
-      else if (Math.abs(delta) > 5) {
-        if (delta > 0) {
-          isHidden = true; 
-        } else {
-          isHidden = false;
+        isHidden = false;
+      } else if (Math.abs(delta) > 5) {
+        isHidden = delta > 0;
+      }
+
+      if (isHidden) {
+        header.classList.add("-translate-y-full");
+        document.documentElement.style.setProperty("--header-offset", "0px");
+      } else {
+        header.classList.remove("-translate-y-full");
+        document.documentElement.style.setProperty("--header-offset", `${header.offsetHeight}px`);
+      }
+
+      lastScroll = currentScroll;
+    }
+
+    function onScroll() {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          if (!reduceMotion) update();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }
+
+    if (!reduceMotion && header) update();
+
+    window.removeEventListener("scroll", onScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
+
+    document.querySelectorAll<HTMLAnchorElement>('a[href="/#projects-layer"]').forEach((el) => {
+      const newEl = el.cloneNode(true) as HTMLAnchorElement;
+      el.parentNode?.replaceChild(newEl, el);
+
+      newEl.addEventListener("click", (e) => {
+        const isHome = window.location.pathname === "/" || window.location.pathname === "/index.html";
+        if (isHome && (window as any).__lenis) {
+          e.preventDefault();
+          (window as any).__lenis.scrollTo("#projects-layer", { offset: -80 });
         }
-      }
-    }
-
-    if (isHidden) {
-      header.classList.add("-translate-y-full");
-      document.documentElement.style.setProperty("--header-offset", "0px");
-    } else {
-      header.classList.remove("-translate-y-full");
-      document.documentElement.style.setProperty("--header-offset", `${header.offsetHeight}px`);
-    }
-
-    lastScroll = currentScroll;
-  }
-
-  function onScroll() {
-    if (!ticking) {
-      window.requestAnimationFrame(() => {
-        if (!reduceMotion) update();
-        ticking = false;
       });
-      ticking = true;
-    }
+    });
   }
 
-  if (!reduceMotion) update();
-  window.addEventListener("scroll", onScroll, { passive: true });
-  window.addEventListener("resize", () => {
-    if (!reduceMotion) update();
-  });
-
-  // Intercept Work nav link: smooth-scroll on homepage, normal nav on subpages
-  document.querySelectorAll<HTMLAnchorElement>('a[href="/#projects-layer"]').forEach((el) => {
-    el.addEventListener("click", (e) => {
-      const isHome = window.location.pathname === "/" || window.location.pathname === "/index.html";
-      if (isHome && (window as any).__lenis) {
-        e.preventDefault();
-        (window as any).__lenis.scrollTo("#projects-layer", { offset: -80 });
-      }
-    });
-  });
+  initHeaderEngine();
+  document.addEventListener("astro:page-load", initHeaderEngine);
 </script>

@@ -13,7 +13,7 @@ const slugify = (s: string) =>
 
 <nav
   class:list={[
-    "sticky z-40 w-full transition-[top] duration-400 ease-out transform-gpu will-change-[top]",
+    "sticky z-40 w-full transform-gpu will-change-[top]",
     glassmorphism
       ? "bg-page/70 backdrop-blur-md border-b border-white/40"
       : "bg-page border-b border-neutral-200",
@@ -48,138 +48,139 @@ const slugify = (s: string) =>
 </nav>
 
 <script>
-  let isManualScrolling = false;
-  const links = Array.from(document.querySelectorAll<HTMLAnchorElement>("[data-sub-nav-link]"));
+  function initSubNavEngine() {
+    let isManualScrolling = false;
+    const links = Array.from(document.querySelectorAll<HTMLAnchorElement>("[data-sub-nav-link]"));
+    if (links.length === 0) return;
 
-  function setActive(slug: string | null) {
-    for (const a of links) {
-      a.setAttribute("aria-current", a.dataset.subNavLink === slug ? "true" : "false");
-    }
-  }
-
-  // Resolve targets
-  type Target = { el: HTMLElement; slug: string; order: number };
-  const targets: Target[] = [];
-  links.forEach((a, i) => {
-    const slug = a.dataset.subNavLink;
-    if (!slug) return;
-    const el = document.getElementById(slug);
-    if (el) targets.push({ el, slug, order: i });
-  });
-
-  if (targets.length > 0) {
-    const visible = new Set<string>();
     let lastActive: string | null = null;
 
-    const pickActive = () => {
-      if (isManualScrolling || visible.size === 0) return; 
-      let best: Target | null = null;
-      let bestTop = Infinity;
-      for (const t of targets) {
-        if (!visible.has(t.slug)) continue;
-        const top = t.el.getBoundingClientRect().top;
-        if (top < bestTop) {
-          bestTop = top;
-          best = t;
-        }
+    function setActive(slug: string | null) {
+      for (const a of links) {
+        a.setAttribute("aria-current", a.dataset.subNavLink === slug ? "true" : "false");
       }
-      if (best && best.slug !== lastActive) {
-        lastActive = best.slug;
-        setActive(best.slug);
-      }
-    };
+    }
 
-    const io = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          const slug = (entry.target as HTMLElement).id;
-          if (entry.isIntersecting) visible.add(slug);
-          else visible.delete(slug);
-        }
-        pickActive();
-      },
-      { rootMargin: "-30% 0px -65% 0px", threshold: 0 }
-    );
-
-    targets.forEach((t) => io.observe(t.el));
-
-    const initFallback = () => {
-      if (isManualScrolling) return;
-      const trigger = window.innerHeight * 0.3;
-      let best: Target | null = null;
-      for (const t of targets) {
-        const top = t.el.getBoundingClientRect().top;
-        if (top <= trigger) best = t;
-      }
-      if (best && best.slug !== lastActive) {
-        lastActive = best.slug;
-        setActive(best.slug);
-      }
-    };
-    initFallback();
-    window.addEventListener("scroll", initFallback, { passive: true, once: true });
-  }
-
-  links.forEach((a) => {
-    a.addEventListener("click", (e) => {
+    type Target = { el: HTMLElement; slug: string; order: number };
+    const targets: Target[] = [];
+    links.forEach((a, i) => {
       const slug = a.dataset.subNavLink;
       if (!slug) return;
       const el = document.getElementById(slug);
-      if (!el) return;
-      e.preventDefault();
+      if (el) targets.push({ el, slug, order: i });
+    });
 
-      isManualScrolling = true; 
-      setActive(slug); 
+    if (targets.length > 0) {
+      const visible = new Set<string>();
 
-      // 1. Calculate precise offsets and distance early
-      const subNav = document.querySelector<HTMLElement>("[data-sub-nav]");
-      const subNavH = subNav ? subNav.offsetHeight : 0;
-      const offset = -(subNavH + 12); 
-      
-      // Calculate how far we ACTUALLY have to travel
-      const distance = Math.abs(el.getBoundingClientRect().top + offset);
-      const dynamicDuration = Math.min(1.2 + (distance / 2000), 2.8);
-      
-      // 2. Set dynamic lock release
-      // If the jump is tiny (< 50px), release the lock almost instantly.
-      // Otherwise, set the failsafe just 200ms after the animation should naturally end.
-      const timeoutMs = distance < 50 ? 100 : (dynamicDuration * 1000) + 200;
-
-      (window as any).__isJumping = true;
-
-      const releaseLock = () => {
-        clearTimeout((window as any).__jumpFailsafe);
-        if ((window as any).__isJumping) {
-          (window as any).__isJumping = false;
-          window.dispatchEvent(new Event("scroll")); // Instantly forces header to check its position
+      const pickActive = () => {
+        if (isManualScrolling || visible.size === 0) return;
+        let best: Target | null = null;
+        let bestTop = Infinity;
+        for (const t of targets) {
+          if (!visible.has(t.slug)) continue;
+          const top = t.el.getBoundingClientRect().top;
+          if (top < bestTop) {
+            bestTop = top;
+            best = t;
+          }
+        }
+        if (best && best.slug !== lastActive) {
+          lastActive = best.slug;
+          setActive(best.slug);
         }
       };
 
-      clearTimeout((window as any).__jumpFailsafe);
-      (window as any).__jumpFailsafe = setTimeout(releaseLock, timeoutMs);
-
-      const lenis = (window as any).__lenis;
-      
-      if (lenis && typeof lenis.scrollTo === "function") {
-        lenis.scrollTo(el, { 
-          offset,
-          duration: dynamicDuration,
-          easing: (t) => 1 - Math.pow(1 - t, 4), 
-          onComplete: () => {
-            isManualScrolling = false;
-            // Shrunk buffer from 400ms down to 50ms for lightning-fast responsiveness
-            setTimeout(releaseLock, 50);
+      const io = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            const slug = (entry.target as HTMLElement).id;
+            if (entry.isIntersecting) visible.add(slug);
+            else visible.delete(slug);
           }
-        });
-      } else {
-        const top = el.getBoundingClientRect().top + window.scrollY + offset;
-        window.scrollTo({ top, behavior: "smooth" });
-        setTimeout(() => { 
-          isManualScrolling = false; 
-          setTimeout(releaseLock, 50);
-        }, 1000);
-      }
-      history.replaceState(null, "", `#${slug}`);
+          pickActive();
+        },
+        { rootMargin: "-20% 0px -60% 0px", threshold: 0 }
+      );
+
+      targets.forEach((t) => io.observe(t.el));
+
+      const initFallback = () => {
+        if (isManualScrolling) return;
+        const trigger = window.innerHeight * 0.3;
+        let best: Target | null = null;
+        for (const t of targets) {
+          const top = t.el.getBoundingClientRect().top;
+          if (top <= trigger) best = t;
+        }
+        if (best && best.slug !== lastActive) {
+          lastActive = best.slug;
+          setActive(best.slug);
+        }
+      };
+      initFallback();
+
+      window.removeEventListener("scroll", initFallback);
+      window.addEventListener("scroll", initFallback, { passive: true, once: true });
+    }
+
+    links.forEach((a) => {
+      const newA = a.cloneNode(true) as HTMLAnchorElement;
+      a.parentNode?.replaceChild(newA, a);
+
+      newA.addEventListener("click", (e) => {
+        const slug = newA.dataset.subNavLink;
+        if (!slug) return;
+        const el = document.getElementById(slug);
+
+        if (!el) {
+          console.warn(`Scroll Target missing: #${slug}`);
+          return;
+        }
+
+        e.preventDefault();
+        isManualScrolling = true;
+        setActive(slug);
+
+        const subNav = document.querySelector<HTMLElement>("[data-sub-nav]");
+        const subNavH = subNav ? subNav.offsetHeight : 44;
+        const offset = -(subNavH + 24);
+
+        const distance = Math.abs(el.getBoundingClientRect().top + offset);
+        const dynamicDuration = Math.min(1.0 + (distance / 2500), 2.2);
+
+        (window as any).__isJumping = true;
+
+        const releaseLock = () => {
+          clearTimeout((window as any).__jumpFailsafe);
+          if ((window as any).__isJumping) {
+            (window as any).__isJumping = false;
+            isManualScrolling = false;
+            window.dispatchEvent(new Event("scroll"));
+          }
+        };
+
+        clearTimeout((window as any).__jumpFailsafe);
+        (window as any).__jumpFailsafe = setTimeout(releaseLock, (dynamicDuration * 1000) + 150);
+
+        const lenis = (window as any).__lenis;
+        if (lenis && typeof lenis.scrollTo === "function") {
+          lenis.scrollTo(el, {
+            offset,
+            duration: dynamicDuration,
+            easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            onComplete: releaseLock
+          });
+        } else {
+          const top = el.getBoundingClientRect().top + window.scrollY + offset;
+          window.scrollTo({ top, behavior: "smooth" });
+          setTimeout(releaseLock, dynamicDuration * 1000);
+        }
+        history.replaceState(null, "", `#${slug}`);
+      });
     });
-  });
+  }
+
+  initSubNavEngine();
+  document.addEventListener("astro:page-load", initSubNavEngine);
 </script>
