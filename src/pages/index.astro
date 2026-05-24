@@ -121,71 +121,91 @@ const aboutParallax = blocks.find((b) => b.kind === "about-parallax") as
 </BaseLayout>
 
 <script>
-  // ==========================================
-  // 1. DYNAMIC STICKY HEIGHT LOCK
-  // ==========================================
-  const projectsCard = document.getElementById("projects-layer");
-  const aboutCard = document.getElementById("about-layer");
-  
-  const updateSticky = () => {
-    const vh = window.innerHeight;
-    if (projectsCard) {
-      projectsCard.style.top = `${vh - projectsCard.offsetHeight}px`;
+  function initHomeParallax() {
+    // Cancel any running RAF loop and ResizeObserver from a previous init
+    if ((window as any).__homeParallaxRaf) {
+      cancelAnimationFrame((window as any).__homeParallaxRaf);
+      (window as any).__homeParallaxRaf = null;
     }
-    if (aboutCard) {
-      aboutCard.style.top = `${vh - aboutCard.offsetHeight}px`;
+    if ((window as any).__homeParallaxRO) {
+      (window as any).__homeParallaxRO.disconnect();
+      (window as any).__homeParallaxRO = null;
     }
-  };
 
-  updateSticky();
-  new ResizeObserver(updateSticky).observe(document.body);
-  window.addEventListener('resize', updateSticky, { passive: true });
+    // Only run on the home page
+    const heroCard = document.getElementById("hero-layer");
+    if (!heroCard) return;
 
-  // ==========================================
-  // 2. THE PARALLAX DRIFT ENGINE
-  // ==========================================
-  const heroCard = document.getElementById("hero-layer");
-  const footer = document.querySelector("[data-footer]") || document.querySelector("footer"); 
+    // ==========================================
+    // 1. DYNAMIC STICKY HEIGHT LOCK
+    // ==========================================
+    const projectsCard = document.getElementById("projects-layer");
+    const aboutCard = document.getElementById("about-layer");
 
-  const HERO_SPEED = 0.35; 
-  const PROJECTS_SPEED = 0.50; 
-  const ABOUT_SPEED = 0.20;    
-
-  const parallaxTick = () => {
-    const vh = window.innerHeight;
-
-    if (heroCard && projectsCard) {
-      const projectsTop = projectsCard.getBoundingClientRect().top;
-      if (projectsTop <= vh && projectsTop >= 0) {
-        const overlap = vh - projectsTop;
-        heroCard.style.transform = `translateY(${overlap * -HERO_SPEED}px)`;
-      } else if (projectsTop > vh) {
-        heroCard.style.transform = `translateY(0px)`;
+    const updateSticky = () => {
+      const vh = window.innerHeight;
+      if (projectsCard) {
+        projectsCard.style.top = `${vh - projectsCard.offsetHeight}px`;
       }
-    }
-
-    if (projectsCard && aboutCard) {
-      const aboutTop = aboutCard.getBoundingClientRect().top;
-      if (aboutTop <= vh && aboutTop >= 0) {
-        const overlap = vh - aboutTop;
-        projectsCard.style.transform = `translateY(${overlap * -PROJECTS_SPEED}px)`;
-      } else if (aboutTop > vh) {
-        projectsCard.style.transform = `translateY(0px)`;
+      if (aboutCard) {
+        aboutCard.style.top = `${vh - aboutCard.offsetHeight}px`;
       }
-    }
+    };
 
-    if (aboutCard && footer) {
-      const footerTop = footer.getBoundingClientRect().top;
-      if (footerTop <= vh && footerTop >= 0) {
-        const overlap = vh - footerTop;
-        aboutCard.style.transform = `translateY(${overlap * -ABOUT_SPEED}px)`;
-      } else if (footerTop > vh) {
-        aboutCard.style.transform = `translateY(0px)`;
+    updateSticky();
+    const ro = new ResizeObserver(updateSticky);
+    ro.observe(document.body);
+    (window as any).__homeParallaxRO = ro;
+    window.addEventListener("resize", updateSticky, { passive: true });
+
+    // ==========================================
+    // 2. THE PARALLAX DRIFT ENGINE
+    // ==========================================
+    const footer = document.querySelector("[data-footer]") || document.querySelector("footer");
+
+    const HERO_SPEED = 0.35;
+    const PROJECTS_SPEED = 0.50;
+    const ABOUT_SPEED = 0.20;
+
+    const parallaxTick = () => {
+      const vh = window.innerHeight;
+
+      if (heroCard && projectsCard) {
+        const projectsTop = projectsCard.getBoundingClientRect().top;
+        if (projectsTop <= vh && projectsTop >= 0) {
+          const overlap = vh - projectsTop;
+          heroCard.style.transform = `translateY(${overlap * -HERO_SPEED}px)`;
+        } else if (projectsTop > vh) {
+          heroCard.style.transform = `translateY(0px)`;
+        }
       }
-    }
 
-    requestAnimationFrame(parallaxTick);
-  };
+      if (projectsCard && aboutCard) {
+        const aboutTop = aboutCard.getBoundingClientRect().top;
+        if (aboutTop <= vh && aboutTop >= 0) {
+          const overlap = vh - aboutTop;
+          projectsCard.style.transform = `translateY(${overlap * -PROJECTS_SPEED}px)`;
+        } else if (aboutTop > vh) {
+          projectsCard.style.transform = `translateY(0px)`;
+        }
+      }
 
-  requestAnimationFrame(parallaxTick);
+      if (aboutCard && footer) {
+        const footerTop = footer.getBoundingClientRect().top;
+        if (footerTop <= vh && footerTop >= 0) {
+          const overlap = vh - footerTop;
+          aboutCard.style.transform = `translateY(${overlap * -ABOUT_SPEED}px)`;
+        } else if (footerTop > vh) {
+          aboutCard.style.transform = `translateY(0px)`;
+        }
+      }
+
+      (window as any).__homeParallaxRaf = requestAnimationFrame(parallaxTick);
+    };
+
+    (window as any).__homeParallaxRaf = requestAnimationFrame(parallaxTick);
+  }
+
+  initHomeParallax();
+  document.addEventListener("astro:page-load", initHomeParallax);
 </script>
