@@ -5,7 +5,7 @@ import BlockRenderer from "../../components/case-study/BlockRenderer.astro";
 import RelatedProjects from "../../components/case-study/RelatedProjects.astro"; 
 import { parseCaseStudy, resolveCaseStudyPath } from "../../lib/parse-case-study";
 
-const { frontmatter, blocks } = parseCaseStudy(resolveCaseStudyPath("navigation.MD"));
+const { frontmatter, blocks } = parseCaseStudy(resolveCaseStudyPath("navigation.md"));
 ---
 
 <BaseLayout title={`${frontmatter.title} — Liam Oxley`} description={frontmatter.description}>
