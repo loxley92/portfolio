@@ -13,7 +13,7 @@ heroImage: "/assets/wander/hero.webp"
 
   { 
     type="sub-nav", 
-    links=["Overview", "The Problem", "Research Insights", "Service Interventions"],
+    links=["Overview", "Process Overview", "Research Insights", "Service Interventions"],
     glassmorphism=true
   }
 

@@ -13,7 +13,7 @@ heroImage: "/assets/projects/localisation/hero.png"
 
   { 
     type="sub-nav", 
-    links=["Overview", "Optimisation", "Framework"],
+    links=["Overview", "The Challenge", "Research and Discovery", "Design Iterations", "Final Delivery"],
     glassmorphism=true
   }
 
@@ -44,7 +44,7 @@ To design a simplified, scalable localisation process that enables cross-functio
 { section="theme-banner" }
 
 ### Execution & Strategy:
-## Process Overview
+## Research and Discovery
 Auditing the existing process to define goals and create an improved workflow.
 
 
@@ -86,7 +86,7 @@ We moved from a cluttered, confusing mess to a streamlined interface built on 5 
 ### New String Table
 ![](/assets/projects/localisation/new-string-table.png)
 
-## Rebuilding the Workspace
+## Design Iterations
 To solve the workflow bottlenecks, I divided the improvements into two categories: automating repetitive tasks via custom scripts, and redesigning the sheet's architecture to prevent human error.
 
 ### 1. Script Automation
@@ -227,7 +227,7 @@ Taking what I had learned from the workshop and process mapping, I implemented s
 { section="theme-banner" }
 
 ### Barbie Horse Ride and Rescue:
-## Ongoing Success
+## Final Delivery
 Adapting and scaling the architecture using Gemini Pro.
 
 { section="narrative" }

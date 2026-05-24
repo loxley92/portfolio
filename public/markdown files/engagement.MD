@@ -3,7 +3,7 @@ title: "Beyond the Leaderboard"
 description: "Fostering inclusivity and daily play by introducing a non-competitive, reward-driven event system to Rival Stars Horse Racing."
 tags: ["Strategy", "Revenue Growth", "Interaction Design"]
 themeColor: "#e5eda2"
-themeGradient: "linear-gradient(to bottom, #f0f0ce 0%, #e5ef9e 100%)"
+themeGradient: "linear-gradient(to bottom, #eff0ce 0%, #fff8bb 100%)"
 heroImage: "/assets/projects/engagement/hero.png"
 ---
 

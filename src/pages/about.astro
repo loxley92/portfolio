@@ -120,7 +120,8 @@ const timeline = [
               muted
               playsinline
               class="w-full max-w-[550px] h-auto mix-blend-multiply"
-              style={`transform: scale(${item.scale || 1}); transform-origin: ${item.align === 'right' ? 'left center' : 'right center'};`}
+              style={`transform: scale(var(--video-scale, 1)); transform-origin: ${item.align === 'right' ? 'left center' : 'right center'};`}
+              data-scale={item.scale || 1}
             ></video>
           </div>
 
@@ -130,3 +131,14 @@ const timeline = [
 
   </div>
 </BaseLayout>
+
+<script>
+  function applyVideoScales() {
+    document.querySelectorAll<HTMLVideoElement>('video[data-scale]').forEach(video => {
+      const scale = window.innerWidth >= 768 ? (video.dataset.scale ?? '1') : '1';
+      video.style.setProperty('--video-scale', scale);
+    });
+  }
+  applyVideoScales();
+  window.addEventListener('resize', applyVideoScales, { passive: true });
+</script>

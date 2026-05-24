@@ -23,7 +23,7 @@ export const site = {
   email: "liamoxleydesigns@gmail.com",
 
   primaryNav: [
-    { href: "/", label: "Work" },
+    { href: "/#projects-layer", label: "Work" },
     { href: "/about", label: "About" },
   ] satisfies NavLink[],
 

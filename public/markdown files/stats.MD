@@ -3,7 +3,7 @@ title: "Making Stats Meaningful"
 description: "Improving user understanding with a transparent, colour-coded grading system and in-game guides."
 tags: ["Data Viz", "Prototyping", "User Testing"]
 themeColor: "#f7cf7b"
-themeGradient: "linear-gradient(to bottom, #f7e5a2 0%, #f7cf7b 100%)"
+themeGradient: "linear-gradient(to bottom, #fff7e5 0%, #ffdf9b 100%)"
 heroImage: "/assets/projects/stats/hero.png"
 ---
 

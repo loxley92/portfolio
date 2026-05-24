@@ -10,6 +10,8 @@ imageAlt: "Animated line art illustration of Liam collaborating with a client at
 { section="featured-work", zIndex=20 }
 { type="wave-divider" }
 
+{ type="bridge-header", title="Featured vhvgvgWork" }
+
 { type="project-row", imagePos="right", theme="#F3E8FF", link="/work/navigation", image="/assets/navigation/hero.webp" }
 #### IA • Cognitive Load • Scalable System
 ### Restructuring Core Navigation
@@ -20,7 +22,7 @@ Reducing cognitive load by transitioning from nested menus to a scalable hub fra
 
 { type="project-row", imagePos="left", theme="#FFF1F2", link="/work/engagement", image="/assets/engagement/hero.webp" }
 #### Strategy • Revenue Growth • Interaction Design
-### Designing for Engagement
+### Beyond the Leaderboard
 Elevating player engagement and revenue in Rival Stars Horse Racing through strategic event design.
 * Generated $55K at Launch
 * Increased Seasonal Retention
@@ -42,7 +44,7 @@ Improving user understanding with a transparent, color-coded grading system.
 * Enhanced Inclusive Design
 * Met WCAG 2.2 Standards
 
-{ type="project-row", imagePos="right", theme="#F0FDFA", link="/work/wandersearch", image="/assets/wander/hero.webp" }
+{ type="project-row", imagePos="right", theme="#F0FDFA", link="/work/wander", image="/assets/wander/hero.webp" }
 #### User Research • Accessibility • Service Design
 ### Helping Those Who Wander
 Researching ways to improve how cognitively impaired users interact with electronic tracking devices.

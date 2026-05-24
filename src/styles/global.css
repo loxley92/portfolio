@@ -97,6 +97,18 @@
   }
 }
 
+::selection {
+  background: #ffe1c3;
+  color: #171717;
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid #4b32a8;
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
 html {
   background: var(--color-page);
 }
@@ -134,17 +146,17 @@ html.lenis body {
 
 .prose-narrative h2 {
   @apply text-h2;
-  color: var(--color-text-heading); /* Hooks up to your heading color lever */
-  margin-top: 3.5rem;
+  color: var(--color-text-heading);
+  margin-top: 6rem;
   margin-bottom: 1.5rem;
   padding-bottom: 0.3em;
-  border-bottom: 1px solid var(--color-divider); /* The underline is back! */
+  border-bottom: 1px solid var(--color-divider);
 }
 
 .prose-narrative h3 {
   @apply text-h3;
-  color: var(--color-text-heading); /* Hooks up to your heading color lever */
-  margin-top: 2.5rem;
+  color: var(--color-text-heading);
+  margin-top: 4rem;
   margin-bottom: 0.75rem;
 }
 
@@ -221,13 +233,6 @@ video {
   margin-bottom: 4rem;
 }
 
-/* 2. Macro Breaks (Chapter Dividers) */
-.prose-narrative h2 {
-  margin-top: 6rem !important;
-}
-.prose-narrative h3 {
-  margin-top: 4rem !important;
-}
 /* Prevents double-spacing if a heading is the very first item */
 .prose-narrative > h2:first-child,
 .prose-narrative > h3:first-child {
@@ -310,4 +315,13 @@ video {
   color: #737373; /* Tailwind neutral-500 */
   padding-bottom: 1rem;
   border-bottom: 1px solid rgba(212, 212, 212, 0.7); /* Tailwind neutral-300/70 */
+}
+
+/* =========================================
+   HOVER ANIMATIONS
+   All custom hover transitions must live inside this block so touch
+   devices never get stuck in a hover state.
+   ========================================= */
+@media (hover: hover) {
+  /* Add project-specific hover animation rules here */
 }

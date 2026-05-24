@@ -43,7 +43,7 @@ heroImage: "/assets/home/hero-sketch.png"
   * Enhanced Inclusive Design
   * Met WCAG 2.2 Standards
 
-  { type="project-row", imagePos="right", theme="#F0FDFA", link="/work/wandersearch", image="/assets/home/thumb-wandersearch.png" }
+  { type="project-row", imagePos="right", theme="#F0FDFA", link="/work/wander", image="/assets/home/thumb-wandersearch.png" }
   #### User Research • Accessibility • Service Design
   ### Helping Those Who Wander
   Researching ways to improve how cognitively impaired users interact with electronic tracking devices.

@@ -1,123 +1,50 @@
 ---
-// src/components/case-study/RelatedProjects.astro
-import Reveal from "../Reveal.astro";
 import { parseCaseStudy, resolveCaseStudyPath } from "../../lib/parse-case-study";
+import ProjectRow from "../ProjectRow.astro";
+import Reveal from "../Reveal.astro";
 
 interface Props {
-  currentSlug: string; 
+  currentSlug: string;
 }
 
 const { currentSlug } = Astro.props;
 
-// 1. DYNAMICALLY PARSE HOME.MD (No more hardcoding!)
-// We reuse your exact parsing logic to look at your homepage source of truth.
+// 1. Read home.md EXACTLY like your index.astro does
 const { blocks } = parseCaseStudy(resolveCaseStudyPath("home.md"));
+const allProjectRows = blocks.filter((b) => b.kind === "project-row");
 
-// 2. EXTRACT AND RENAME PROJECT ROWS
-// Filter down to just the project rows you curated on your homepage,
-// and extract the variables your block compiler generates.
-const allProjects = blocks
-  .filter((block: any) => block.type === "project-row")
-  .map((project: any) => {
-    // Extract the slug directly out of your links (e.g., /work/navigation -> navigation)
-    const derivedSlug = project.link ? project.link.split("/").pop() : "";
-    
-    // Fix the localization path asset string directly on compile if needed
-    let imagePath = project.image;
-    if (derivedSlug === "localization" && imagePath.includes("thumb-localization.png")) {
-      imagePath = "/assets/projects/localisation/hero.webp";
-    }
+// 2. Filter out the case study we are currently looking at
+const otherProjects = allProjectRows.filter((block: any) => {
+  const link = (block.attrs?.link as string) || "";
+  // If the link is "/work/navigation" and currentSlug is "navigation", this removes it.
+  return !link.includes(currentSlug);
+});
 
-    return {
-      slug: derivedSlug,
-      title: project.title || project.heading,
-      description: project.description || project.text,
-      tags: project.subtitle || project.tags || "", // Handles your "IA • Cognitive Load" text
-      bullets: project.bullets || project.items || [],
-      img: imagePath,
-      theme: project.theme || "#ffffff"
-    };
-  });
-
-// 3. RUN THE CONTINUOUS BINGE LOOP
-const currentIndex = allProjects.findIndex((p: any) => p.slug === currentSlug);
-const nextIndex = currentIndex !== -1 ? (currentIndex + 1) % allProjects.length : 0;
-const nextProject = allProjects[nextIndex] || allProjects[0];
+// 3. Pick a random project from the remaining list
+const randomIndex = Math.floor(Math.random() * otherProjects.length);
+const nextProject = otherProjects[randomIndex] || otherProjects[0];
 ---
 
-{/* Render nothing if the file system fails to find home.md rows */}
 {nextProject && (
-  <div class="container-wide !mt-32 !mb-32 relative z-10">
-    <div class="border-t border-neutral-200 pt-12">
-      <p class="text-xs font-sans font-bold tracking-[0.15em] uppercase text-neutral-400 mb-12">
+  <div class="w-full relative z-10 border-t border-neutral-200 mt-24 pt-12 pb-24">
+    
+    {/* Label */}
+    <div class="max-w-[1200px] mx-auto px-6">
+      <p class="text-xs font-sans font-bold tracking-[0.15em] uppercase text-neutral-400">
         Up Next
       </p>
-
-      <Reveal delay={0.1} as="div">
-        {/* MASTER ARCHOR LINK: UX-compliant master target with smooth lift animation */}
-        <a 
-          href={`/work/${nextProject.slug}`}
-          class="group block w-full no-underline focus:outline-none transition-transform duration-500 hover:-translate-y-1"
-        >
-          <div class="grid md:grid-cols-2 gap-12 md:gap-16 items-center">
-            
-            {/* Left Side: Editorial Text */}
-            <div class="flex flex-col items-start">
-              
-              <p class="font-sans font-bold text-xs tracking-wider uppercase text-neutral-500 mb-4 group-hover:text-neutral-700 transition-colors duration-300">
-                {nextProject.tags}
-              </p>
-
-              <h3 class="font-serif font-bold text-3xl md:text-4xl text-neutral-800 mb-4 group-hover:text-black transition-colors duration-300">
-                {nextProject.title}
-              </h3>
-              
-              <p class="font-sans text-neutral-500 leading-relaxed mb-6 group-hover:text-neutral-800 transition-colors duration-300">
-                {nextProject.description}
-              </p>
-
-              <ul class="list-disc pl-5 text-neutral-500 space-y-2 marker:text-neutral-400 group-hover:text-neutral-800 transition-colors duration-300 mb-8">
-                {nextProject.bullets.map((bullet: string) => (
-                  <li>{bullet}</li>
-                ))}
-              </ul>
-
-              {/* View More Text is now a semantic structural element inside the card */}
-              <div class="inline-flex items-center gap-3 font-serif font-bold text-lg text-neutral-800 group-hover:text-black transition-colors duration-300">
-                View More 
-                <svg 
-                  class="w-8 h-4 transform group-hover:translate-x-2 transition-transform duration-300" 
-                  viewBox="0 0 40 16" 
-                  fill="none" 
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path 
-                    d="M0 8 C 5 14, 8 2, 13 8 C 18 14, 21 2, 26 8 C 30 13, 32 8, 35 8 L 38 8 M 34 4 L 39 8 L 34 12" 
-                    stroke="currentColor" 
-                    stroke-width="3" 
-                    stroke-linecap="round" 
-                    stroke-linejoin="round"
-                  />
-                </svg>
-              </div>
-            </div>
-
-            {/* Right Side: Image Canvas */}
-            {/* Pulled 1:1 from your home.md custom properties layout */}
-            <div 
-              class="w-full relative aspect-[4/3] rounded-xl overflow-hidden" 
-              style={`background-color: ${nextProject.theme};`}
-            >
-              <img 
-                src={nextProject.img} 
-                alt={nextProject.title}
-                class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" 
-              />
-            </div>
-
-          </div>
-        </a>
-      </Reveal>
     </div>
+
+    {/* We just reuse your flawless ProjectRow component! */}
+    <Reveal delay={0.1} as="div">
+      <ProjectRow
+        theme={nextProject.attrs.theme as string}
+        link={nextProject.attrs.link as string}
+        image={nextProject.attrs.image as string}
+        imagePos="right"
+        content={nextProject.content || ""}
+      />
+    </Reveal>
+    
   </div>
 )}

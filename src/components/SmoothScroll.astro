@@ -5,21 +5,46 @@
 <script>
   import Lenis from "lenis";
 
-  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if (!prefersReducedMotion) {
-    const lenis = new Lenis({
-      duration: 1.1,
-      easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      smoothWheel: true,
-    });
+  let lenis: Lenis | null = null; // Keep a reference so we can destroy it on page changes
 
-    function raf(time: number) {
-      lenis.raf(time);
+  function initLenis() {
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    
+    if (!prefersReducedMotion) {
+      // 1. Destroy the old instance if we just navigated to a new page
+      if (lenis) {
+        lenis.destroy();
+      }
+
+      // 2. Build a fresh instance that reads the NEW page's height
+      lenis = new Lenis({
+        duration: 1.1,
+        easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        smoothWheel: true,
+      });
+
+      function raf(time: number) {
+        lenis?.raf(time);
+        requestAnimationFrame(raf);
+      }
       requestAnimationFrame(raf);
-    }
-    requestAnimationFrame(raf);
 
-    // Expose for anchor-link handlers (e.g. sub-nav)
-    (window as any).__lenis = lenis;
+      // Expose for anchor-link handlers (e.g. sub-nav)
+      (window as any).__lenis = lenis;
+    }
   }
+
+  // Initialize on the very first website load
+  initLenis();
+
+  // 3. The magic fix: Tell Lenis and the browser to snap to the top the millisecond the page swaps
+  document.addEventListener("astro:after-swap", () => {
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    if ((window as any).__lenis) {
+      (window as any).__lenis.scrollTo(0, { immediate: true });
+    }
+  });
+
+  // 4. Re-run the setup function when the new page is fully loaded
+  document.addEventListener("astro:page-load", initLenis);
 </script>

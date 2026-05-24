@@ -43,7 +43,9 @@ export type Block =
   | (BlockBase & { kind: "content-split"; attrs: DirectiveAttrs; content: string })
   | (BlockBase & { kind: "home-hero"; attrs: DirectiveAttrs; content: string })
   | (BlockBase & { kind: "project-row"; attrs: DirectiveAttrs; content: string })
-  | (BlockBase & { kind: "about-parallax"; attrs: DirectiveAttrs; content: string });
+  | (BlockBase & { kind: "about-parallax"; attrs: DirectiveAttrs; content: string })
+  | (BlockBase & { kind: "section-title"; attrs: DirectiveAttrs })
+  | (BlockBase & { kind: "bridge-header"; attrs: DirectiveAttrs });
 
 export interface ParsedCaseStudy {
   frontmatter: Frontmatter;

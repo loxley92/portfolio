@@ -9,8 +9,8 @@ const isHome = pathname === "/" || pathname === "/index.html";
 
 <header
   class={isHome 
-    ? "absolute top-0 left-0 right-0 z-50 w-full px-12 py-8 flex items-center justify-between bg-transparent" 
-    : "fixed top-0 left-0 right-0 z-50 w-full px-12 py-8 flex items-center justify-between transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] bg-transparent"}
+    ? "absolute top-0 left-0 right-0 z-50 w-full px-4 sm:px-6 md:px-12 py-4 sm:py-8 flex items-center justify-between bg-transparent"
+    : "fixed top-0 left-0 right-0 z-50 w-full px-4 sm:px-6 md:px-12 py-4 sm:py-8 flex items-center justify-between transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] bg-transparent"}
   data-header={!isHome ? "" : undefined}
 >
   <a href="/" class="transition-transform hover:scale-105 active:scale-95" aria-label={site.name}>
@@ -22,7 +22,7 @@ const isHome = pathname === "/" || pathname === "/index.html";
       {navLinks.map((link) => (
         <a 
           href={link.href} 
-          class="px-8 py-0.3 rounded-full text-[1.1rem] font-sans font-bold tracking-tight text-purple transition-all duration-200 hover:bg-purple/10 active:scale-95"
+          class="px-4 sm:px-8 py-0.3 rounded-full text-sm sm:text-[1.1rem] font-sans font-bold tracking-tight text-purple transition-all duration-200 hover:bg-purple/10 active:scale-95"
         >
           {link.label}
         </a>
@@ -98,5 +98,16 @@ const isHome = pathname === "/" || pathname === "/index.html";
   window.addEventListener("scroll", onScroll, { passive: true });
   window.addEventListener("resize", () => {
     if (!reduceMotion) update();
+  });
+
+  // Intercept Work nav link: smooth-scroll on homepage, normal nav on subpages
+  document.querySelectorAll<HTMLAnchorElement>('a[href="/#projects-layer"]').forEach((el) => {
+    el.addEventListener("click", (e) => {
+      const isHome = window.location.pathname === "/" || window.location.pathname === "/index.html";
+      if (isHome && (window as any).__lenis) {
+        e.preventDefault();
+        (window as any).__lenis.scrollTo("#projects-layer", { offset: -80 });
+      }
+    });
   });
 </script>

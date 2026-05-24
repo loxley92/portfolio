@@ -3,7 +3,7 @@ title: "Restructuring Core Navigation"
 description: "Reducing cognitive load by transitioning from nested menus to a scalable hub framework."
 tags: ["IA", "Cognitive Load", "Scalable Systems"]
 themeColor: "#61d2ff"
-themeGradient: "linear-gradient(to bottom, #abe7ff 0%, #61d2ff 100%)"
+themeGradient: "linear-gradient(to bottom, #effaff 0%, #aae7ff 100%)"
 heroImage: "/assets/navigation/hero.webp"
 ---
 

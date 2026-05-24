@@ -40,7 +40,12 @@
       "Bash(Select-Object -First 10)",
       "Bash(python3 -c ' *)",
       "Bash(curl -s http://localhost:4322/about/)",
-      "Bash(kill %1)"
+      "Bash(kill %1)",
+      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\loxle\\\\Desktop\\\\portfolio\" -Recurse -Force)",
+      "Bash(Select-Object -First 50)",
+      "Bash(Format-Table FullName)",
+      "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\loxle\\\\Desktop\\\\portfolio\" -Recurse | Where-Object {$_.Extension -in '.astro', '.md', '.MD', '.css'} | Select-Object FullName | Sort-Object FullName)",
+      "Bash(xargs wc -l)"
     ]
   }
 }

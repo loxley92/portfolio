@@ -17,12 +17,13 @@ const tags = h4Match
   ? h4Match[1].split("•").map((s) => s.trim()).filter(Boolean)
   : [];
 const cleanContent = content.replace(/^####\s+.+\n?/m, "");
+const projectTitle = content.match(/^###\s+(.+)$/m)?.[1]?.trim() ?? "";
 ---
 
 <a href={link} class="block group hover:scale-[1.015] transition-all duration-300 ease-out cursor-pointer pb-12">
-  <div class="w-full max-w-[1200px] mx-auto px-6 py-16">
+  <div class="w-full max-w-[1200px] mx-auto px-4 sm:px-6 py-8 sm:py-16">
     
-    <div class={`flex flex-col ${rowDir} items-start gap-12`}>
+    <div class={`flex flex-col ${rowDir} items-start gap-6 md:gap-12`}>
       
       <div class="w-full md:w-[55%]">
         {tags.length > 0 && (
@@ -54,8 +55,8 @@ const cleanContent = content.replace(/^####\s+.+\n?/m, "");
         <div class="w-full rounded-2xl bg-white p-2.5 border border-neutral-200/60 shadow-[0_4px_16px_rgba(0,0,0,0.03)] group-hover:shadow-[0_12px_24px_rgba(0,0,0,0.05)] transition-all duration-500 overflow-hidden">
           <img
             src={image}
-            alt=""
-            class="w-full h-auto rounded-xl block transition-transform duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:scale-[1.03]" 
+            alt={projectTitle ? `Preview of ${projectTitle}` : ""}
+            class="w-full h-auto rounded-xl block transition-transform duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:scale-[1.03]"
           />
         </div>
 
