@@ -30,7 +30,7 @@ Elevating player engagement and revenue in Rival Stars Horse Racing through stra
 
 { type="project-row", imagePos="right", theme="#FEF9C3", link="/work/localisation", image="/assets/localisation/hero.webp" }
 #### Process Optimization • Internal Tooling • Automation
-### Localization Process Improvement
+### Localisation Process Improvement
 Creating scalable solutions for translation management and cross-discipline workflows.
 * Automated Manual Workflows
 * Improved Release Readiness
